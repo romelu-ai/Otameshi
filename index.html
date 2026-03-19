@@ -4,19 +4,19 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MOSAIC VIDEO Generator</title>
+<title>MOSAIC PNG Generator</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <header>
   <h1>MOSAIC</h1>
-  <span>徐々にモザイクをかける動画ジェネレーター</span>
+  <span>連番PNG → ZIPで書き出し</span>
 </header>
 <div class="container">
 
   <div class="drop-zone" id="dropZone">
     <span class="icon">🖼️</span>
-    <strong>画像をドロップ または タップして選択</strong>
+    <strong>タップして画像を選択</strong>
     <p>PNG / JPG / WebP 対応</p>
     <label class="file-label" for="fileInput">ファイルを選ぶ</label>
     <input type="file" id="fileInput" accept="image/*">
@@ -64,9 +64,8 @@
   </div>
 
   <div class="btn-row" id="btnRow" style="display:none;">
-    <button class="btn-primary" id="generateBtn">▶ 動画を生成</button>
+    <button class="btn-primary" id="generateBtn">▶ ZIP生成</button>
     <button class="btn-secondary" id="previewBtn">👁 プレビュー</button>
-    <button class="btn-secondary" id="stopBtn" style="display:none;">⏹ 停止</button>
     <button class="btn-secondary" id="resetBtn">✕ リセット</button>
   </div>
 
@@ -76,15 +75,13 @@
   </div>
 
   <div id="result-area">
-    <p class="instruction">✅ 完成！ 動画を再生・保存できます</p>
-    <p class="sub">右クリック（長押し）→「動画を保存」 または下のボタンでダウンロード</p>
-    <video id="videoOutput" controls loop playsinline></video>
-    <br>
-    <a id="downloadLink" class="btn-download" download="mosaic.webm">⬇ 動画をダウンロード</a>
-    <p class="format-note">※ WebM形式です。MP4に変換したい場合は<a href="https://cloudconvert.com/webm-to-mp4" target="_blank">CloudConvert</a>等をご利用ください。</p>
+    <p class="instruction">✅ 完成！ ZIPをダウンロードしてください</p>
+    <p class="sub">CapCut / iMovie などに連番PNGを読み込んで動画化できます</p>
+    <a id="downloadLink" class="btn-download">⬇ ZIPをダウンロード</a>
   </div>
 
 </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script src="app.js"></script>
 </body>
 </html>
