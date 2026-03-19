@@ -1,60 +1,63 @@
 ‘use strict’;
 
-var srcImg = null, previewInterval = null, recorder = null, renderInterval = null;
+var srcImg = null, previewInterval = null;
 var originalCanvas = document.getElementById(‘originalCanvas’);
-var previewCanvas = document.getElementById(‘previewCanvas’);
+var previewCanvas  = document.getElementById(‘previewCanvas’);
 
-// — Slider labels —
-document.getElementById(‘mosaicSize’).oninput = function() {
-document.getElementById(‘mosaicVal’).textContent = this.value + ‘px’;
-if (srcImg) renderPreview(Math.max(1, +this.value / 2));
-};
-document.getElementById(‘duration’).oninput = function() { document.getElementById(‘durationVal’).textContent = this.value + ‘秒’; };
-document.getElementById(‘fps’).oninput = function() { document.getElementById(‘fpsVal’).textContent = this.value + ‘fps’; };
-document.getElementById(‘outputSize’).oninput = function() { document.getElementById(‘sizeVal’).textContent = this.value + ‘px’; };
+// スライダー表示
+document.getElementById(‘mosaicSize’).oninput  = function(){ document.getElementById(‘mosaicVal’).textContent  = this.value + ‘px’; if(srcImg) renderPreview(Math.max(1,+this.value/2)); };
+document.getElementById(‘duration’).oninput    = function(){ document.getElementById(‘durationVal’).textContent = this.value + ‘秒’; };
+document.getElementById(‘fps’).oninput         = function(){ document.getElementById(‘fpsVal’).textContent      = this.value + ‘fps’; };
+document.getElementById(‘outputSize’).oninput  = function(){ document.getElementById(‘sizeVal’).textContent     = this.value + ‘px’; };
 
-// — Drop zone —
+// ファイル選択
+document.getElementById(‘fileInput’).addEventListener(‘change’, function(){
+if (this.files && this.files[0]) loadImg(this.files[0]);
+});
+
+// ドラッグ&ドロップ（PC向け）
 var dz = document.getElementById(‘dropZone’);
-dz.addEventListener(‘dragover’, function(e) { e.preventDefault(); dz.classList.add(‘dragover’); });
-dz.addEventListener(‘dragleave’, function() { dz.classList.remove(‘dragover’); });
-dz.addEventListener(‘drop’, function(e) {
+dz.addEventListener(‘dragover’,  function(e){ e.preventDefault(); dz.classList.add(‘dragover’); });
+dz.addEventListener(‘dragleave’, function(){ dz.classList.remove(‘dragover’); });
+dz.addEventListener(‘drop’,      function(e){
 e.preventDefault(); dz.classList.remove(‘dragover’);
 var f = e.dataTransfer.files[0];
 if (f && f.type.startsWith(‘image/’)) loadImg(f);
 });
-document.getElementById(‘fileInput’).addEventListener(‘change’, function() {
-if (this.files[0]) loadImg(this.files[0]);
-});
 
 function loadImg(file) {
-var r = new FileReader();
-r.onload = function(e) {
-srcImg = new Image();
-srcImg.onload = function() {
-var scale = Math.min(600 / srcImg.width, 600 / srcImg.height, 1);
-originalCanvas.width = previewCanvas.width = Math.round(srcImg.width * scale);
-originalCanvas.height = previewCanvas.height = Math.round(srcImg.height * scale);
-originalCanvas.getContext(‘2d’).drawImage(srcImg, 0, 0, originalCanvas.width, originalCanvas.height);
+var reader = new FileReader();
+reader.onload = function(ev) {
+var image = new Image();
+image.onload = function() {
+srcImg = image;
+var scale = Math.min(600/image.width, 600/image.height, 1);
+var w = Math.round(image.width  * scale);
+var h = Math.round(image.height * scale);
+originalCanvas.width  = previewCanvas.width  = w;
+originalCanvas.height = previewCanvas.height = h;
+originalCanvas.getContext(‘2d’).drawImage(image, 0, 0, w, h);
 renderPreview(1);
-document.getElementById(‘previewArea’).style.display = ‘grid’;
+document.getElementById(‘previewArea’).style.display   = ‘grid’;
 document.getElementById(‘controlsPanel’).style.display = ‘grid’;
-document.getElementById(‘btnRow’).style.display = ‘flex’;
-document.getElementById(‘result-area’).classList.remove(‘show’);
+document.getElementById(‘btnRow’).style.display        = ‘flex’;
+document.getElementById(‘result-area’).style.display   = ‘none’;
 dz.style.display = ‘none’;
 };
-srcImg.src = e.target.result;
+image.src = ev.target.result;
 };
-r.readAsDataURL(file);
+reader.readAsDataURL(file);
 }
 
-// — Mosaic —
-function applyMosaicInPlace(canvas, bs) {
-if (bs <= 1) return;
-var w = canvas.width, h = canvas.height;
-var ctx = canvas.getContext(‘2d’);
-var px = ctx.getImageData(0, 0, w, h);
-var out = new ImageData(w, h);
+// モザイク処理
+function applyMosaic(srcCanvas, destCanvas, bs) {
+var w = srcCanvas.width, h = srcCanvas.height;
 var b = Math.max(1, Math.round(bs));
+var sCtx = srcCanvas.getContext(‘2d’);
+var dCtx = destCanvas.getContext(‘2d’);
+if (b <= 1) { dCtx.drawImage(srcCanvas, 0, 0); return; }
+var px  = sCtx.getImageData(0, 0, w, h);
+var out = new ImageData(w, h);
 for (var y = 0; y < h; y += b) for (var x = 0; x < w; x += b) {
 var r=0,g=0,bl=0,a=0,c=0;
 for (var dy=0;dy<b&&y+dy<h;dy++) for (var dx=0;dx<b&&x+dx<w;dx++) {
@@ -65,170 +68,140 @@ for (var dy=0;dy<b&&y+dy<h;dy++) for (var dx=0;dx<b&&x+dx<w;dx++) {
 var i=((y+dy)*w+(x+dx))*4; out.data[i]=r;out.data[i+1]=g;out.data[i+2]=bl;out.data[i+3]=a;
 }
 }
-ctx.putImageData(out, 0, 0);
+dCtx.putImageData(out, 0, 0);
 }
 
 function renderPreview(bs) {
 var ctx = previewCanvas.getContext(‘2d’);
 ctx.drawImage(srcImg, 0, 0, previewCanvas.width, previewCanvas.height);
 if (bs > 1.5) {
-// mosaic on a temp canvas to avoid modifying original
 var tmp = document.createElement(‘canvas’);
 tmp.width = previewCanvas.width; tmp.height = previewCanvas.height;
 tmp.getContext(‘2d’).drawImage(srcImg, 0, 0, tmp.width, tmp.height);
-applyMosaicInPlace(tmp, bs);
-ctx.drawImage(tmp, 0, 0);
+applyMosaic(tmp, previewCanvas, bs);
 }
 }
 
 function easeFn(t, type) {
-if (type === ‘ease-in’) return t * t;
-if (type === ‘ease-out’) return t * (2 - t);
-if (type === ‘ease-inout’) return t < 0.5 ? 2*t*t : -1+(4-2*t)*t;
+if (type===‘ease-in’)    return t*t;
+if (type===‘ease-out’)   return t*(2-t);
+if (type===‘ease-inout’) return t<0.5 ? 2*t*t : -1+(4-2*t)*t;
 return t;
 }
 function getProgress(t, dir, et) {
-if (dir === ‘inout’) return t < 0.5 ? easeFn(t*2, et) : easeFn((1-t)*2, et);
-if (dir === ‘in’) return easeFn(t, et);
-return 1 - easeFn(t, et);
+if (dir===‘inout’) return t<0.5 ? easeFn(t*2,et) : easeFn((1-t)*2,et);
+if (dir===‘in’)    return easeFn(t,et);
+return 1-easeFn(t,et);
 }
 
-// — Preview animation —
-document.getElementById(‘previewBtn’).onclick = function() {
+// プレビューアニメ
+document.getElementById(‘previewBtn’).onclick = function(){
 if (!srcImg) return;
-if (previewInterval) { clearInterval(previewInterval); previewInterval = null; }
-var mb = +document.getElementById(‘mosaicSize’).value;
-var dir = document.getElementById(‘direction’).value;
-var et = document.getElementById(‘easing’).value;
-var cd = +document.getElementById(‘duration’).value * 1000;
-var s = performance.now();
-previewInterval = setInterval(function() {
-var t = ((performance.now() - s) % cd) / cd;
-renderPreview(Math.max(1, getProgress(t, dir, et) * mb));
-}, 1000/60);
+if (previewInterval){ clearInterval(previewInterval); previewInterval=null; }
+var mb=+document.getElementById(‘mosaicSize’).value;
+var dir=document.getElementById(‘direction’).value;
+var et=document.getElementById(‘easing’).value;
+var cd=+document.getElementById(‘duration’).value*1000;
+var s=performance.now();
+previewInterval=setInterval(function(){
+var t=((performance.now()-s)%cd)/cd;
+renderPreview(Math.max(1,getProgress(t,dir,et)*mb));
+},1000/60);
 };
 
-// — Generate video —
-document.getElementById(‘generateBtn’).onclick = function() {
+// ZIP生成
+document.getElementById(‘generateBtn’).onclick = function(){
 if (!srcImg) return;
-if (previewInterval) { clearInterval(previewInterval); previewInterval = null; }
+if (previewInterval){ clearInterval(previewInterval); previewInterval=null; }
 
-var mb     = +document.getElementById(‘mosaicSize’).value;
-var dur    = +document.getElementById(‘duration’).value;
-var fpsVal = +document.getElementById(‘fps’).value;
-var ms     = +document.getElementById(‘outputSize’).value;
-var dir    = document.getElementById(‘direction’).value;
-var et     = document.getElementById(‘easing’).value;
+var mb    = +document.getElementById(‘mosaicSize’).value;
+var dur   = +document.getElementById(‘duration’).value;
+var fpsV  = +document.getElementById(‘fps’).value;
+var ms    = +document.getElementById(‘outputSize’).value;
+var dir   = document.getElementById(‘direction’).value;
+var et    = document.getElementById(‘easing’).value;
 
-var scale = Math.min(ms / srcImg.width, ms / srcImg.height, 1);
-var ow = Math.round(srcImg.width * scale);
-var oh = Math.round(srcImg.height * scale);
+var totalFrames = Math.round(dur * fpsV);
+var scale = Math.min(ms/srcImg.width, ms/srcImg.height, 1);
+var ow = Math.round(srcImg.width*scale), oh = Math.round(srcImg.height*scale);
 
-// Offscreen canvas for recording
-var offscreen = document.createElement(‘canvas’);
-offscreen.width = ow; offscreen.height = oh;
-var offCtx = offscreen.getContext(‘2d’);
+// 元画像をoffscreenに描画
+var srcCanvas = document.createElement(‘canvas’);
+srcCanvas.width=ow; srcCanvas.height=oh;
+srcCanvas.getContext(‘2d’).drawImage(srcImg,0,0,ow,oh);
 
-// Detect best supported format
-var mimeType = ‘’;
-var formats = [‘video/mp4;codecs=avc1’, ‘video/webm;codecs=vp9’, ‘video/webm;codecs=vp8’, ‘video/webm’];
-for (var i = 0; i < formats.length; i++) {
-if (MediaRecorder.isTypeSupported(formats[i])) { mimeType = formats[i]; break; }
-}
-if (!mimeType) { alert(‘お使いのブラウザは動画録画に対応していません。Chrome / Edge をお試しください。’); return; }
+var frameCanvas = document.createElement(‘canvas’);
+frameCanvas.width=ow; frameCanvas.height=oh;
 
-var ext = mimeType.startsWith(‘video/mp4’) ? ‘mp4’ : ‘webm’;
-
-var pw = document.getElementById(‘progressWrap’);
-var pf = document.getElementById(‘progressFill’);
-var st = document.getElementById(‘statusText’);
+var pw=document.getElementById(‘progressWrap’);
+var pf=document.getElementById(‘progressFill’);
+var st=document.getElementById(‘statusText’);
 pw.classList.add(‘active’);
-pf.style.width = ‘0%’;
-st.textContent = ‘録画開始…’;
-document.getElementById(‘generateBtn’).disabled = true;
-document.getElementById(‘stopBtn’).style.display = ‘’;
-document.getElementById(‘result-area’).classList.remove(‘show’);
+pf.style.width=‘0%’;
+document.getElementById(‘result-area’).style.display=‘none’;
+document.getElementById(‘generateBtn’).disabled=true;
 
-var stream = offscreen.captureStream(fpsVal);
-var chunks = [];
-recorder = new MediaRecorder(stream, {
-mimeType: mimeType,
-videoBitsPerSecond: 8000000
-});
-recorder.ondataavailable = function(e) { if (e.data && e.data.size > 0) chunks.push(e.data); };
-recorder.onstop = function() {
-if (renderInterval) { clearInterval(renderInterval); renderInterval = null; }
-stream.getTracks().forEach(function(t) { t.stop(); });
+var zip = new JSZip();
+var fi  = 0;
 
-```
-var blob = new Blob(chunks, { type: mimeType.split(';')[0] });
+function nextFrame(){
+if (fi >= totalFrames){
+st.textContent=‘ZIPを圧縮中…’;
+zip.generateAsync({type:‘blob’}, function(meta){
+pf.style.width = (50 + meta.percent*0.5) + ‘%’;
+st.textContent = ’ZIP圧縮中… ’ + Math.round(50+meta.percent*0.5) + ‘%’;
+}).then(function(blob){
 var url = URL.createObjectURL(blob);
-
-var video = document.getElementById('videoOutput');
-video.src = url;
-
-var link = document.getElementById('downloadLink');
+var link = document.getElementById(‘downloadLink’);
 link.href = url;
-link.download = 'mosaic.' + ext;
-
-document.getElementById('result-area').classList.add('show');
-pf.style.width = '100%';
-st.textContent = '完了！';
-setTimeout(function() { pw.classList.remove('active'); }, 800);
-document.getElementById('generateBtn').disabled = false;
-document.getElementById('stopBtn').style.display = 'none';
-recorder = null;
-```
-
-};
-
-recorder.start(100); // collect every 100ms
-
-var startTime = performance.now();
-var totalMs = dur * 1000;
-
-renderInterval = setInterval(function() {
-var elapsed = performance.now() - startTime;
-var t = Math.min(elapsed / totalMs, 1);
-var progress = getProgress(t, dir, et);
-var bs = Math.max(1, progress * mb);
-
-```
-offCtx.drawImage(srcImg, 0, 0, ow, oh);
-if (bs > 1.5) applyMosaicInPlace(offscreen, bs);
-
-pf.style.width = (t * 100) + '%';
-st.textContent = '録画中... ' + Math.round(t * 100) + '% (' + Math.round(elapsed/1000) + '/' + dur + '秒)';
-
-if (t >= 1) {
-  clearInterval(renderInterval);
-  renderInterval = null;
-  setTimeout(function() { if (recorder && recorder.state !== 'inactive') recorder.stop(); }, 200);
+link.download = ‘mosaic_frames.zip’;
+document.getElementById(‘result-area’).style.display=‘block’;
+pf.style.width=‘100%’;
+st.textContent=’完了！ ’ + totalFrames + ’枚 / ’ + (ow+‘x’+oh) + ‘px’;
+setTimeout(function(){ pw.classList.remove(‘active’); },800);
+document.getElementById(‘generateBtn’).disabled=false;
+});
+return;
 }
+
+```
+var t = totalFrames===1 ? 1 : fi/(totalFrames-1);
+var progress = getProgress(t, dir, et);
+var bs = Math.max(1, progress*mb);
+
+var ctx = frameCanvas.getContext('2d');
+ctx.clearRect(0,0,ow,oh);
+ctx.drawImage(srcCanvas,0,0);
+if (bs>1.5) applyMosaic(srcCanvas, frameCanvas, bs);
+
+// PNGとしてZIPへ追加
+var num = String(fi+1).padStart(5,'0');
+var dataURL = frameCanvas.toDataURL('image/png');
+var base64  = dataURL.split(',')[1];
+zip.file('frame_'+num+'.png', base64, {base64:true});
+
+pf.style.width = ((fi+1)/totalFrames*50)+'%';
+st.textContent  = 'フレーム生成中... '+(fi+1)+'/'+totalFrames;
+fi++;
+setTimeout(nextFrame, 0);
 ```
 
-}, 1000 / fpsVal);
+}
+
+st.textContent=‘フレームを生成中…’;
+nextFrame();
 };
 
-// — Stop button —
-document.getElementById(‘stopBtn’).onclick = function() {
-if (renderInterval) { clearInterval(renderInterval); renderInterval = null; }
-if (recorder && recorder.state !== ‘inactive’) recorder.stop();
-};
-
-// — Reset —
-document.getElementById(‘resetBtn’).onclick = function() {
-srcImg = null;
-if (previewInterval) { clearInterval(previewInterval); previewInterval = null; }
-if (renderInterval) { clearInterval(renderInterval); renderInterval = null; }
-if (recorder && recorder.state !== ‘inactive’) { recorder.stop(); recorder = null; }
-document.getElementById(‘previewArea’).style.display = ‘none’;
-document.getElementById(‘controlsPanel’).style.display = ‘none’;
-document.getElementById(‘btnRow’).style.display = ‘none’;
-document.getElementById(‘result-area’).classList.remove(‘show’);
+// リセット
+document.getElementById(‘resetBtn’).onclick = function(){
+srcImg=null;
+if(previewInterval){clearInterval(previewInterval);previewInterval=null;}
+document.getElementById(‘previewArea’).style.display=‘none’;
+document.getElementById(‘controlsPanel’).style.display=‘none’;
+document.getElementById(‘btnRow’).style.display=‘none’;
+document.getElementById(‘result-area’).style.display=‘none’;
 document.getElementById(‘progressWrap’).classList.remove(‘active’);
-document.getElementById(‘generateBtn’).disabled = false;
-document.getElementById(‘stopBtn’).style.display = ‘none’;
-dz.style.display = ‘block’;
-document.getElementById(‘fileInput’).value = ‘’;
+document.getElementById(‘generateBtn’).disabled=false;
+dz.style.display=‘block’;
+document.getElementById(‘fileInput’).value=’’;
 };
