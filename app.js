@@ -1,13 +1,13 @@
 ‘use strict’;
 
-var img = null, previewInterval = null, recorder = null, renderInterval = null;
+var srcImg = null, previewInterval = null, recorder = null, renderInterval = null;
 var originalCanvas = document.getElementById(‘originalCanvas’);
 var previewCanvas = document.getElementById(‘previewCanvas’);
 
 // — Slider labels —
 document.getElementById(‘mosaicSize’).oninput = function() {
 document.getElementById(‘mosaicVal’).textContent = this.value + ‘px’;
-if (img) renderPreview(Math.max(1, +this.value / 2));
+if (srcImg) renderPreview(Math.max(1, +this.value / 2));
 };
 document.getElementById(‘duration’).oninput = function() { document.getElementById(‘durationVal’).textContent = this.value + ‘秒’; };
 document.getElementById(‘fps’).oninput = function() { document.getElementById(‘fpsVal’).textContent = this.value + ‘fps’; };
@@ -29,12 +29,12 @@ if (this.files[0]) loadImg(this.files[0]);
 function loadImg(file) {
 var r = new FileReader();
 r.onload = function(e) {
-img = new Image();
-img.onload = function() {
-var scale = Math.min(600 / img.width, 600 / img.height, 1);
-originalCanvas.width = previewCanvas.width = Math.round(img.width * scale);
-originalCanvas.height = previewCanvas.height = Math.round(img.height * scale);
-originalCanvas.getContext(‘2d’).drawImage(img, 0, 0, originalCanvas.width, originalCanvas.height);
+srcImg = new Image();
+srcImg.onload = function() {
+var scale = Math.min(600 / srcImg.width, 600 / srcImg.height, 1);
+originalCanvas.width = previewCanvas.width = Math.round(srcImg.width * scale);
+originalCanvas.height = previewCanvas.height = Math.round(srcImg.height * scale);
+originalCanvas.getContext(‘2d’).drawImage(srcImg, 0, 0, originalCanvas.width, originalCanvas.height);
 renderPreview(1);
 document.getElementById(‘previewArea’).style.display = ‘grid’;
 document.getElementById(‘controlsPanel’).style.display = ‘grid’;
@@ -42,7 +42,7 @@ document.getElementById(‘btnRow’).style.display = ‘flex’;
 document.getElementById(‘result-area’).classList.remove(‘show’);
 dz.style.display = ‘none’;
 };
-img.src = e.target.result;
+srcImg.src = e.target.result;
 };
 r.readAsDataURL(file);
 }
@@ -70,12 +70,12 @@ ctx.putImageData(out, 0, 0);
 
 function renderPreview(bs) {
 var ctx = previewCanvas.getContext(‘2d’);
-ctx.drawImage(img, 0, 0, previewCanvas.width, previewCanvas.height);
+ctx.drawImage(srcImg, 0, 0, previewCanvas.width, previewCanvas.height);
 if (bs > 1.5) {
 // mosaic on a temp canvas to avoid modifying original
 var tmp = document.createElement(‘canvas’);
 tmp.width = previewCanvas.width; tmp.height = previewCanvas.height;
-tmp.getContext(‘2d’).drawImage(img, 0, 0, tmp.width, tmp.height);
+tmp.getContext(‘2d’).drawImage(srcImg, 0, 0, tmp.width, tmp.height);
 applyMosaicInPlace(tmp, bs);
 ctx.drawImage(tmp, 0, 0);
 }
@@ -95,7 +95,7 @@ return 1 - easeFn(t, et);
 
 // — Preview animation —
 document.getElementById(‘previewBtn’).onclick = function() {
-if (!img) return;
+if (!srcImg) return;
 if (previewInterval) { clearInterval(previewInterval); previewInterval = null; }
 var mb = +document.getElementById(‘mosaicSize’).value;
 var dir = document.getElementById(‘direction’).value;
@@ -110,7 +110,7 @@ renderPreview(Math.max(1, getProgress(t, dir, et) * mb));
 
 // — Generate video —
 document.getElementById(‘generateBtn’).onclick = function() {
-if (!img) return;
+if (!srcImg) return;
 if (previewInterval) { clearInterval(previewInterval); previewInterval = null; }
 
 var mb     = +document.getElementById(‘mosaicSize’).value;
@@ -120,9 +120,9 @@ var ms     = +document.getElementById(‘outputSize’).value;
 var dir    = document.getElementById(‘direction’).value;
 var et     = document.getElementById(‘easing’).value;
 
-var scale = Math.min(ms / img.width, ms / img.height, 1);
-var ow = Math.round(img.width * scale);
-var oh = Math.round(img.height * scale);
+var scale = Math.min(ms / srcImg.width, ms / srcImg.height, 1);
+var ow = Math.round(srcImg.width * scale);
+var oh = Math.round(srcImg.height * scale);
 
 // Offscreen canvas for recording
 var offscreen = document.createElement(‘canvas’);
@@ -194,7 +194,7 @@ var progress = getProgress(t, dir, et);
 var bs = Math.max(1, progress * mb);
 
 ```
-offCtx.drawImage(img, 0, 0, ow, oh);
+offCtx.drawImage(srcImg, 0, 0, ow, oh);
 if (bs > 1.5) applyMosaicInPlace(offscreen, bs);
 
 pf.style.width = (t * 100) + '%';
@@ -218,7 +218,7 @@ if (recorder && recorder.state !== ‘inactive’) recorder.stop();
 
 // — Reset —
 document.getElementById(‘resetBtn’).onclick = function() {
-img = null;
+srcImg = null;
 if (previewInterval) { clearInterval(previewInterval); previewInterval = null; }
 if (renderInterval) { clearInterval(renderInterval); renderInterval = null; }
 if (recorder && recorder.state !== ‘inactive’) { recorder.stop(); recorder = null; }
