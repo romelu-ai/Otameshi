@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MOSAIC VIDEO Generator</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <h1>MOSAIC</h1>
+  <span>徐々にモザイクをかける動画ジェネレーター</span>
+</header>
+<div class="container">
+
+  <div class="drop-zone" id="dropZone">
+    <input type="file" id="fileInput" accept="image/*">
+    <span class="icon">🖼️</span>
+    <strong>画像をドロップ または クリックして選択</strong>
+    <p>PNG / JPG / WebP 対応</p>
+  </div>
+
+  <div class="preview-area" id="previewArea" style="display:none;">
+    <div class="preview-box"><label>ORIGINAL</label><canvas id="originalCanvas"></canvas></div>
+    <div class="preview-box"><label>PREVIEW</label><canvas id="previewCanvas"></canvas></div>
+  </div>
+
+  <div class="controls" id="controlsPanel" style="display:none;">
+    <div class="control-group">
+      <label>モザイク最大強度 <span class="value" id="mosaicVal">40px</span></label>
+      <input type="range" id="mosaicSize" min="4" max="400" value="40" step="4">
+    </div>
+    <div class="control-group">
+      <label>動画の長さ <span class="value" id="durationVal">10秒</span></label>
+      <input type="range" id="duration" min="1" max="60" value="10" step="1">
+    </div>
+    <div class="control-group">
+      <label>フレームレート <span class="value" id="fpsVal">30fps</span></label>
+      <input type="range" id="fps" min="10" max="60" value="30" step="5">
+    </div>
+    <div class="control-group">
+      <label>出力サイズ（長辺） <span class="value" id="sizeVal">720px</span></label>
+      <input type="range" id="outputSize" min="240" max="1280" value="720" step="80">
+    </div>
+    <div class="control-group">
+      <label>方向</label>
+      <select id="direction">
+        <option value="in">クリア → モザイク</option>
+        <option value="out">モザイク → クリア</option>
+        <option value="inout">往復（かかる→晴れる）</option>
+      </select>
+    </div>
+    <div class="control-group">
+      <label>イージング</label>
+      <select id="easing">
+        <option value="linear">一定（linear）</option>
+        <option value="ease-in">最初ゆっくり</option>
+        <option value="ease-out" selected>最後ゆっくり</option>
+        <option value="ease-inout">両端ゆっくり</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="btn-row" id="btnRow" style="display:none;">
+    <button class="btn-primary" id="generateBtn">▶ 動画を生成</button>
+    <button class="btn-secondary" id="previewBtn">👁 プレビュー</button>
+    <button class="btn-secondary" id="stopBtn" style="display:none;">⏹ 停止</button>
+    <button class="btn-secondary" id="resetBtn">✕ リセット</button>
+  </div>
+
+  <div class="progress-wrap" id="progressWrap">
+    <div class="progress-bar-bg"><div class="progress-bar-fill" id="progressFill"></div></div>
+    <p class="status" id="statusText">準備中...</p>
+  </div>
+
+  <div id="result-area">
+    <p class="instruction">✅ 完成！ 動画を再生・保存できます</p>
+    <p class="sub">右クリック（長押し）→「動画を保存」 または下のボタンでダウンロード</p>
+    <video id="videoOutput" controls loop playsinline></video>
+    <br>
+    <a id="downloadLink" class="btn-download" download="mosaic.webm">⬇ 動画をダウンロード</a>
+    <p class="format-note">※ WebM形式です。MP4に変換したい場合は<a href="https://cloudconvert.com/webm-to-mp4" target="_blank">CloudConvert</a>等をご利用ください。</p>
+  </div>
+
+</div>
+<script src="app.js"></script>
+</body>
+</html>
