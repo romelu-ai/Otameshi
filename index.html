@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>化学フラッシュカード II — 遷移元素・金属イオン分析</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#0f1117;--surface:#1a1d27;--card:#22263a;--border:#2e3350;--c-fe:#f97316;--c-cu:#3b82f6;--c-ag:#a855f7;--c-zn:#22c55e;--c-cr:#ef4444;--c-mn:#eab308;--c-other:#06b6d4;--c-ion:#ec4899;--accent:#f97316;--text:#e8eaf0;--text-sub:#8b90a8;--shadow:0 8px 32px rgba(0,0,0,.5)}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--text);font-family:'Noto Sans JP',sans-serif;min-height:100vh;padding:20px}
+  header{text-align:center;padding:40px 20px 20px}
+  header h1{font-family:'Space Mono',monospace;font-size:clamp(1.3rem,4vw,2rem);letter-spacing:.1em;color:var(--c-fe);text-shadow:0 0 20px rgba(249,115,22,.4)}
+  header p{color:var(--text-sub);font-size:.9rem;margin-top:6px}
+  .filter-bar{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:20px auto;max-width:780px}
+  .filter-btn{padding:7px 16px;border-radius:20px;border:2px solid var(--border);background:var(--surface);color:var(--text-sub);font-family:'Noto Sans JP',sans-serif;font-size:.8rem;cursor:pointer;transition:all .2s}
+  .filter-btn:hover{border-color:var(--accent);color:var(--text)}
+  .filter-btn.active{color:#0f1117;font-weight:700}
+  .filter-btn[data-cat=fe].active{background:var(--c-fe);border-color:var(--c-fe)}
+  .filter-btn[data-cat=cu].active{background:var(--c-cu);border-color:var(--c-cu)}
+  .filter-btn[data-cat=ag].active{background:var(--c-ag);border-color:var(--c-ag)}
+  .filter-btn[data-cat=zn].active{background:var(--c-zn);border-color:var(--c-zn)}
+  .filter-btn[data-cat=cr].active{background:var(--c-cr);border-color:var(--c-cr)}
+  .filter-btn[data-cat=mn].active{background:var(--c-mn);border-color:var(--c-mn)}
+  .filter-btn[data-cat=other].active{background:var(--c-other);border-color:var(--c-other)}
+  .filter-btn[data-cat=ion].active{background:var(--c-ion);border-color:var(--c-ion)}
+  .filter-btn[data-cat=all].active{background:var(--accent);border-color:var(--accent)}
+  .stats-bar{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin:0 auto 24px;max-width:700px}
+  .stat{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:10px 18px;text-align:center;min-width:80px}
+  .stat-num{font-family:'Space Mono',monospace;font-size:1.4rem;color:var(--accent)}
+  .stat-label{font-size:.72rem;color:var(--text-sub);margin-top:2px}
+  .progress-wrap{max-width:700px;margin:0 auto 20px}
+  .progress-bar-bg{height:4px;background:var(--border);border-radius:2px;overflow:hidden}
+  .progress-bar-fill{height:100%;background:linear-gradient(90deg,var(--c-fe),var(--c-cu));border-radius:2px;transition:width .4s ease}
+  .progress-text{text-align:right;font-size:.75rem;color:var(--text-sub);margin-top:6px;font-family:'Space Mono',monospace}
+  .card-area{max-width:700px;margin:0 auto;perspective:1200px}
+  .flashcard{width:100%;min-height:320px;position:relative;cursor:pointer;transform-style:preserve-3d;transition:transform .55s cubic-bezier(.4,.2,.2,1)}
+  .flashcard.flipped{transform:rotateY(180deg)}
+  .card-face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;background:var(--card);border:1px solid var(--border);border-radius:20px;padding:32px 28px;display:flex;flex-direction:column;justify-content:center;box-shadow:var(--shadow);min-height:320px}
+  .card-face.back{transform:rotateY(180deg)}
+  .card-badge{display:inline-flex;align-items:center;gap:6px;font-size:.75rem;font-family:'Space Mono',monospace;padding:4px 12px;border-radius:20px;margin-bottom:16px;width:fit-content}
+  .badge-fe{background:rgba(249,115,22,.15);color:var(--c-fe);border:1px solid rgba(249,115,22,.3)}
+  .badge-cu{background:rgba(59,130,246,.15);color:var(--c-cu);border:1px solid rgba(59,130,246,.3)}
+  .badge-ag{background:rgba(168,85,247,.15);color:var(--c-ag);border:1px solid rgba(168,85,247,.3)}
+  .badge-zn{background:rgba(34,197,94,.15);color:var(--c-zn);border:1px solid rgba(34,197,94,.3)}
+  .badge-cr{background:rgba(239,68,68,.15);color:var(--c-cr);border:1px solid rgba(239,68,68,.3)}
+  .badge-mn{background:rgba(234,179,8,.15);color:var(--c-mn);border:1px solid rgba(234,179,8,.3)}
+  .badge-other{background:rgba(6,182,212,.15);color:var(--c-other);border:1px solid rgba(6,182,212,.3)}
+  .badge-ion{background:rgba(236,72,153,.15);color:var(--c-ion);border:1px solid rgba(236,72,153,.3)}
+  .card-num{font-family:'Space Mono',monospace;font-size:.75rem;color:var(--text-sub);margin-bottom:12px}
+  .card-question{font-size:clamp(1rem,2.5vw,1.2rem);font-weight:700;line-height:1.7;color:var(--text)}
+  .card-hint{margin-top:24px;font-size:.8rem;color:var(--text-sub);display:flex;align-items:center;gap:6px}
+  .card-hint::before{content:"▶";font-size:.7rem}
+  .card-answer{font-size:clamp(.95rem,2.2vw,1.1rem);font-weight:700;line-height:1.8;color:var(--accent);white-space:pre-line;margin-bottom:14px}
+  .card-explanation{font-size:.83rem;color:var(--text-sub);line-height:1.7;border-top:1px solid var(--border);padding-top:12px}
+  .result-btns{display:none;gap:12px;justify-content:center;margin:0 auto 12px;max-width:700px}
+  .result-btns.visible{display:flex}
+  .controls{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin:20px auto;max-width:700px}
+  .btn{padding:11px 24px;border-radius:12px;border:none;font-family:'Noto Sans JP',sans-serif;font-size:.9rem;font-weight:700;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:8px}
+  .btn-primary{background:var(--accent);color:#0f1117}
+  .btn-primary:hover{filter:brightness(1.15);transform:translateY(-2px)}
+  .btn-secondary{background:var(--surface);color:var(--text);border:1px solid var(--border)}
+  .btn-secondary:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-2px)}
+  .btn-danger{background:rgba(239,68,68,.15);color:#f87171;border:1px solid rgba(239,68,68,.3)}
+  .btn-danger:hover{background:rgba(239,68,68,.25);transform:translateY(-2px)}
+  .btn-correct{background:rgba(34,197,94,.15);color:#4ade80;border:1px solid rgba(34,197,94,.3)}
+  .btn-correct:hover{background:rgba(34,197,94,.3);transform:translateY(-2px)}
+  .btn-wrong{background:rgba(249,115,22,.15);color:var(--c-fe);border:1px solid rgba(249,115,22,.3)}
+  .btn-wrong:hover{background:rgba(249,115,22,.3);transform:translateY(-2px)}
+  .complete-screen{display:none;text-align:center;max-width:500px;margin:40px auto;padding:48px 32px;background:var(--card);border:1px solid var(--border);border-radius:24px;box-shadow:var(--shadow)}
+  .complete-screen.visible{display:block}
+  .complete-emoji{font-size:4rem;margin-bottom:16px}
+  .complete-title{font-family:'Space Mono',monospace;font-size:1.5rem;color:var(--accent);margin-bottom:12px}
+  .complete-score{font-size:3rem;font-weight:700;color:var(--text);margin:16px 0;font-family:'Space Mono',monospace}
+  .complete-sub{color:var(--text-sub);font-size:.9rem}
+  .theme-toggle{position:fixed;top:16px;right:16px;background:var(--surface);border:1px solid var(--border);color:var(--text-sub);border-radius:50%;width:40px;height:40px;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;transition:all .2s}
+  .theme-toggle:hover{border-color:var(--accent);color:var(--accent)}
+  body.light{--bg:#f4f6fb;--surface:#fff;--card:#fff;--border:#e2e6f0;--text:#1a1d27;--text-sub:#6b7280;--shadow:0 8px 32px rgba(0,0,0,.1)}
+  @media(max-width:480px){.card-face{padding:22px 18px}.btn{padding:9px 16px;font-size:.82rem}}
+</style>
+</head>
+<body>
+<button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+<header>
+  <h1>⚗ CHEMISTRY FLASH II</h1>
+  <p>第3編 遷移元素・金属イオン分析 — 全130問</p>
+</header>
+<div class="filter-bar">
+  <button class="filter-btn active" data-cat="all" onclick="setFilter('all',this)">すべて</button>
+  <button class="filter-btn" data-cat="fe" onclick="setFilter('fe',this)">Fe 鉄</button>
+  <button class="filter-btn" data-cat="cu" onclick="setFilter('cu',this)">Cu 銅</button>
+  <button class="filter-btn" data-cat="ag" onclick="setFilter('ag',this)">Ag 銀</button>
+  <button class="filter-btn" data-cat="zn" onclick="setFilter('zn',this)">Zn 亜鉛</button>
+  <button class="filter-btn" data-cat="cr" onclick="setFilter('cr',this)">Cr クロム</button>
+  <button class="filter-btn" data-cat="mn" onclick="setFilter('mn',this)">Mn マンガン</button>
+  <button class="filter-btn" data-cat="other" onclick="setFilter('other',this)">その他遷移金属</button>
+  <button class="filter-btn" data-cat="ion" onclick="setFilter('ion',this)">金属イオン分析・合金</button>
+</div>
+<div class="stats-bar">
+  <div class="stat"><div class="stat-num" id="stat-total">0</div><div class="stat-label">合計</div></div>
+  <div class="stat"><div class="stat-num" id="stat-correct" style="color:#4ade80">0</div><div class="stat-label">正解</div></div>
+  <div class="stat"><div class="stat-num" id="stat-wrong" style="color:var(--c-fe)">0</div><div class="stat-label">不正解</div></div>
+  <div class="stat"><div class="stat-num" id="stat-remain" style="color:var(--c-cu)">0</div><div class="stat-label">残り</div></div>
+</div>
+<div class="progress-wrap">
+  <div class="progress-bar-bg"><div class="progress-bar-fill" id="progress-fill" style="width:0%"></div></div>
+  <div class="progress-text" id="progress-text">0 / 0</div>
+</div>
+<div class="card-area" id="card-area">
+  <div class="flashcard" id="flashcard" onclick="flipCard()">
+    <div class="card-face front">
+      <div class="card-num" id="card-num"></div>
+      <div class="card-badge" id="card-badge"></div>
+      <div class="card-question" id="card-question"></div>
+      <div class="card-hint">タップして答えを確認</div>
+    </div>
+    <div class="card-face back">
+      <div class="card-badge" id="card-badge-back"></div>
+      <div class="card-answer" id="card-answer"></div>
+      <div class="card-explanation" id="card-explanation"></div>
+    </div>
+  </div>
+</div>
+<div class="result-btns" id="result-btns">
+  <button class="btn btn-wrong" onclick="markResult(false)">✗ もう一度</button>
+  <button class="btn btn-correct" onclick="markResult(true)">✓ 正解！</button>
+</div>
+<div class="controls">
+  <button class="btn btn-secondary" onclick="prevCard()">← 前へ</button>
+  <button class="btn btn-primary" onclick="nextCard()">次へ →</button>
+  <button class="btn btn-danger" onclick="shuffleAndReset()">🔀 シャッフル</button>
+</div>
+<div class="complete-screen" id="complete-screen">
+  <div class="complete-emoji" id="complete-emoji">🎉</div>
+  <div class="complete-title">COMPLETE!</div>
+  <div class="complete-score" id="complete-score"></div>
+  <div class="complete-sub" id="complete-sub"></div>
+  <br><br>
+  <button class="btn btn-primary" onclick="restartAll()" style="margin:auto">もう一度挑戦</button>
+</div>
+<script>
+const CATEGORIES={fe:{label:'Fe 鉄',cls:'badge-fe'},cu:{label:'Cu 銅',cls:'badge-cu'},ag:{label:'Ag 銀',cls:'badge-ag'},zn:{label:'Zn 亜鉛',cls:'badge-zn'},cr:{label:'Cr クロム',cls:'badge-cr'},mn:{label:'Mn マンガン',cls:'badge-mn'},other:{label:'その他遷移金属',cls:'badge-other'},ion:{label:'金属イオン分析・合金',cls:'badge-ion'}};
+const ALL_QUESTIONS=[
+{id:1,category:'fe',question:`遷移元素は何族に属する元素か。`,answer:`第3族〜第12族の元素`,explanation:`周期表の中央部分に位置する。典型元素と区別して覚える。`},
+{id:2,category:'fe',question:`遷移元素の最外殻電子数は何個か。`,answer:`1〜2個（どの遷移元素もほぼ同じ）`,explanation:`内側のd軌道に電子が順に入るため最外殻電子数はあまり変わらない。`},
+{id:3,category:'fe',question:`遷移元素の密度・融点は典型金属と比べてどうか。`,answer:`密度が大きく、融点が高い。`,explanation:`Fe（7.9 g/cm³、1535℃）やCu（8.9 g/cm³、1085℃）など。`},
+{id:4,category:'fe',question:`遷移元素の酸化数の特徴を答えよ。`,answer:`同一元素でも複数の酸化数をとる。\n例：Feは+2と+3、Mnは+2〜+7`,explanation:`これにより多様な化合物を形成する。`},
+{id:5,category:'fe',question:`遷移元素の化合物の色の特徴を答えよ。`,answer:`有色の化合物が多い。\n例：Fe²⁺（淡緑色）、Fe³⁺（黄褐色）、Cu²⁺（青色）`,explanation:`d軌道の電子遷移により可視光を吸収して発色する。`},
+{id:6,category:'fe',question:`遷移元素は錯イオンをつくりやすい。その理由を答えよ。`,answer:`d軌道の空きに配位子（NH₃・CN⁻など）が配位結合できるから。`,explanation:`錯イオンは特徴的な色をもつものが多い。`},
+{id:7,category:'fe',question:`遷移元素が触媒として使われる例を2つ答えよ。`,answer:`① Fe（ハーバー・ボッシュ法のNH₃合成触媒）\n② MnO₂（H₂O₂の分解触媒）`,explanation:`遷移元素は複数の酸化数をとれるため触媒として働きやすい。`},
+{id:8,category:'fe',question:`鉄Feは何族の元素か。主な酸化数を2つ答えよ。`,answer:`第8族。酸化数：+2（Fe²⁺）と+3（Fe³⁺）`,explanation:`Fe²⁺を含む化合物例：FeSO₄（淡緑色）。Fe³⁺：FeCl₃（黄褐色）。`},
+{id:9,category:'fe',question:`鉄の製錬で用いる炉の名称を答えよ。`,answer:`溶鉱炉（高炉）`,explanation:`鉄鉱石・コークス・石灰石を原料とする。`},
+{id:10,category:'fe',question:`鉄の製錬で用いる主原料を3つ答えよ。`,answer:`① 鉄鉱石（Fe₂O₃）\n② コークス（炭素C）\n③ 石灰石（CaCO₃）`,explanation:`コークスが燃焼してCOを生成し、COが鉄鉱石を還元する。`},
+{id:11,category:'fe',question:`溶鉱炉でFe₂O₃が還元される反応式を書け。`,answer:`Fe₂O₃ + 3CO → 2Fe + 3CO₂`,explanation:`COがFe₂O₃を還元して鉄を得る。製鉄の核心反応。`},
+{id:12,category:'fe',question:`銑鉄とはどういうものか。炭素含有量を含めて答えよ。`,answer:`炭素を約4%含む鉄。脆くて硬い。溶鉱炉で得られる。`,explanation:`そのままでは加工しにくい。転炉で炭素量を減らして鋼にする。`},
+{id:13,category:'fe',question:`鋼とはどういうものか。炭素含有量を含めて答えよ。`,answer:`銑鉄の炭素含有量を2〜0.02%に下げたもの。硬く強く加工しやすい。`,explanation:`建築・鉄道・自動車など幅広く使われる。`},
+{id:14,category:'fe',question:`銑鉄から鋼を作る工程で使う炉の名称と方法を答えよ。`,answer:`転炉。銑鉄に酸素を吹き込んで炭素を燃焼させ除去する。`,explanation:`炭素含有量を適切に下げることで鋼になる。`},
+{id:15,category:'fe',question:`Fe₂O₃の色を答えよ。`,answer:`赤褐色（赤錆の主成分）`,explanation:`自然界では鉄鉱石・赤鉄鉱として存在する。`},
+{id:16,category:'fe',question:`Fe₃O₄の色と別名を答えよ。`,answer:`黒色。別名：磁鉄鉱`,explanation:`Fe²⁺とFe³⁺を含む混合酸化物。磁石に引き寄せられる。`},
+{id:17,category:'fe',question:`鉄を空気中に放置すると生じるさびの主成分を答えよ。`,answer:`Fe₂O₃（または含水酸化鉄 Fe₂O₃·nH₂O）。色：赤褐色`,explanation:`生成に酸素と水分の両方が必要。`},
+{id:18,category:'fe',question:`Fe²⁺水溶液にNaOH水溶液を加えたときの反応式と沈殿の色を答えよ。`,answer:`Fe²⁺ + 2OH⁻ → Fe(OH)₂↓\n沈殿の色：緑白色`,explanation:`緑白色のFe(OH)₂は空気酸化でFe(OH)₃（赤褐色）になる。`},
+{id:19,category:'fe',question:`Fe(OH)₂が空気中で酸化されてFe(OH)₃になる反応式を書け。`,answer:`4Fe(OH)₂ + O₂ + 2H₂O → 4Fe(OH)₃`,explanation:`緑白色→赤褐色に変化する。`},
+{id:20,category:'fe',question:`Fe³⁺水溶液にNaOH水溶液を加えたときの反応式と沈殿の色を答えよ。`,answer:`Fe³⁺ + 3OH⁻ → Fe(OH)₃↓\n沈殿の色：赤褐色`,explanation:`Fe(OH)₃は両性でないためNaOH過剰でも溶けない。`},
+{id:21,category:'fe',question:`Fe³⁺の確認試薬①と反応の変化を答えよ（KSCNを用いる）。`,answer:`試薬：KSCN（チオシアン酸カリウム）\n変化：血赤色の溶液になる`,explanation:`Fe³⁺が存在すると血赤色になる。最重要の確認反応。`},
+{id:22,category:'fe',question:`Fe³⁺の確認試薬②と反応の変化を答えよ（黄血塩を用いる）。`,answer:`試薬：K₄[Fe(CN)₆]（黄血塩）\n変化：濃青色沈殿（ターンブルブルー）が生じる`,explanation:`黄血塩はFe²⁺を中心に持つ錯塩。Fe³⁺と反応して濃青色沈殿。`},
+{id:23,category:'fe',question:`Fe²⁺の確認試薬と反応の変化を答えよ（赤血塩を用いる）。`,answer:`試薬：K₃[Fe(CN)₆]（赤血塩）\n変化：濃青色沈殿（紺青）が生じる`,explanation:`赤血塩はFe³⁺を中心に持つ錯塩。Fe²⁺との反応で濃青色沈殿。Fe²⁺とFe³⁺で試薬が逆になる。`},
+{id:24,category:'fe',question:`FeSO₄·7H₂O（硫酸鉄(II)七水和物）の色を答えよ。`,answer:`淡緑色の結晶`,explanation:`Fe²⁺イオンの水溶液は淡緑色。`},
+{id:25,category:'fe',question:`Fe²⁺水溶液にH₂Sを通じたときの反応式と沈殿の色を答えよ。`,answer:`Fe²⁺ + S²⁻ → FeS↓（黒色沈殿）`,explanation:`FeSは黒色。酸性条件では析出しにくい。`},
+{id:26,category:'fe',question:`黄血塩K₄[Fe(CN)₆]の正式名称と溶液中での電離式を答えよ。`,answer:`正式名称：ヘキサシアノ鉄(II)酸カリウム\n電離：K₄[Fe(CN)₆] → 4K⁺ + [Fe(CN)₆]⁴⁻`,explanation:`[Fe(CN)₆]⁴⁻の中心金属はFe²⁺で6個のCN⁻が配位（正八面体形）。`},
+{id:27,category:'fe',question:`赤血塩K₃[Fe(CN)₆]の正式名称と溶液中での電離式を答えよ。`,answer:`正式名称：ヘキサシアノ鉄(III)酸カリウム\n電離：K₃[Fe(CN)₆] → 3K⁺ + [Fe(CN)₆]³⁻`,explanation:`[Fe(CN)₆]³⁻の中心金属はFe³⁺で6個のCN⁻が配位。Fe²⁺検出に使う。`},
+{id:28,category:'cu',question:`銅Cuの族と単体の色を答えよ。`,answer:`第11族。赤色（赤橙色）の光沢をもつ金属`,explanation:`金属の中で特徴的な赤色。`},
+{id:29,category:'cu',question:`銅の電気伝導率は金属の中で何番目か。`,answer:`銀（Ag）に次いで2番目に大きい。`,explanation:`電気伝導率はAg > Cu > Au > Al の順。電線材料として広く使われる。`},
+{id:30,category:'cu',question:`銅を空気中で加熱したときの反応式と生成物の色を答えよ。`,answer:`2Cu + O₂ → 2CuO（黒色）`,explanation:`黒色の酸化銅(II)が生成する。`},
+{id:31,category:'cu',question:`CuO（酸化銅(II)）をさらに強熱するとどうなるか。反応式を書け。`,answer:`4CuO → 2Cu₂O + O₂\nCu₂O（赤色、酸化銅(I)）が生成する`,explanation:`高温でCuO→Cu₂Oへの変化が起こる。`},
+{id:32,category:'cu',question:`銅と希硝酸の反応式を書け。発生する気体の色も答えよ。`,answer:`3Cu + 8HNO₃(希) → 3Cu(NO₃)₂ + 2NO↑ + 4H₂O\nNO：無色`,explanation:`希硝酸ではNO（無色の気体）が発生する。`},
+{id:33,category:'cu',question:`銅と濃硝酸の反応式を書け。発生する気体の色も答えよ。`,answer:`Cu + 4HNO₃(濃) → Cu(NO₃)₂ + 2NO₂↑ + 2H₂O\nNO₂：赤褐色`,explanation:`濃硝酸ではNO₂（赤褐色の刺激臭の気体）が発生する。`},
+{id:34,category:'cu',question:`銅と熱濃硫酸の反応式を書け。`,answer:`Cu + 2H₂SO₄(熱濃) → CuSO₄ + SO₂↑ + 2H₂O`,explanation:`銅は希硫酸とは反応しないが、熱濃硫酸には溶ける。SO₂（無色・刺激臭）発生。`},
+{id:35,category:'cu',question:`銅が希塩酸・希硫酸と反応しない理由を答えよ。`,answer:`銅のイオン化傾向が水素Hより小さいから。`,explanation:`Cu < H₂ のイオン化傾向。酸化力のない酸とは反応しない。`},
+{id:36,category:'cu',question:`CuSO₄·5H₂Oの色を答えよ。また加熱して無水物にすると何色になるか。`,answer:`CuSO₄·5H₂O：青色\n無水CuSO₄：白色`,explanation:`無水CuSO₄に水を加えると再び青色になる。水分の検出に利用できる。`},
+{id:37,category:'cu',question:`Cu²⁺水溶液にNaOH水溶液を加えたときの反応式と沈殿の色を答えよ。`,answer:`Cu²⁺ + 2OH⁻ → Cu(OH)₂↓（青白色沈殿）`,explanation:`Cu(OH)₂は青白色。加熱するとCuO（黒色）になる。`},
+{id:38,category:'cu',question:`Cu(OH)₂を加熱したときの反応式と生成物の色を答えよ。`,answer:`Cu(OH)₂ → CuO + H₂O\nCuO：黒色`,explanation:`青白色→黒色に変化する。`},
+{id:39,category:'cu',question:`Cu(OH)₂に過剰なNH₃水を加えたときの反応式と変化を答えよ。`,answer:`Cu(OH)₂ + 4NH₃ → [Cu(NH₃)₄]²⁺ + 2OH⁻\n深青色に変化して溶ける`,explanation:`テトラアンミン銅(II)イオン[Cu(NH₃)₄]²⁺が生成する。Cu²⁺の確認反応。`},
+{id:40,category:'cu',question:`[Cu(NH₃)₄]²⁺の名称・色を答えよ。`,answer:`名称：テトラアンミン銅(II)イオン\n色：深青色`,explanation:`NH₃が4個配位した正方形の錯イオン。`},
+{id:41,category:'cu',question:`Cu²⁺水溶液にH₂Sを通じたときの反応式と沈殿の色を答えよ。`,answer:`Cu²⁺ + S²⁻ → CuS↓（黒色沈殿）`,explanation:`CuSは黒色。酸性水溶液中でもH₂Sにより沈殿する（酸に難溶）。`},
+{id:42,category:'cu',question:`黄銅（真鍮）の組成と使用例を答えよ。`,answer:`組成：Cu-Zn合金\n使用例：5円硬貨・楽器・装飾品`,explanation:`Znの割合によって性質が変わる。`},
+{id:43,category:'cu',question:`青銅（ブロンズ）の組成と使用例を答えよ。`,answer:`組成：Cu-Sn合金\n使用例：銅像・鐘・硬貨`,explanation:`古代から広く使われてきた合金。`},
+{id:44,category:'cu',question:`白銅の組成と使用例を答えよ。`,answer:`組成：Cu-Ni合金\n使用例：100円硬貨・50円硬貨`,explanation:`銀白色の光沢をもつCu-Ni合金。`},
+{id:45,category:'cu',question:`銅のさびを緑青という。その主成分を答えよ。`,answer:`Cu₂(OH)₂CO₃（塩基性炭酸銅(II)）など`,explanation:`銅像・銅屋根に見られる青緑色のさび。`},
+{id:46,category:'ag',question:`銀Agの電気伝導率は金属の中で何番目か。`,answer:`1番目（金属中最大）`,explanation:`熱伝導率も最大。電気伝導率はAg > Cu > Au > Al の順。`},
+{id:47,category:'ag',question:`銀と希硝酸の反応式を書け。`,answer:`3Ag + 4HNO₃(希) → 3AgNO₃ + 2NO↑ + 2H₂O`,explanation:`Agは希塩酸・希硫酸とは反応しないが、硝酸には溶ける。`},
+{id:48,category:'ag',question:`AgNO₃水溶液にNaOH水溶液を加えたときの変化と反応式を答えよ。`,answer:`2Ag⁺ + 2OH⁻ → Ag₂O↓（褐色）+ H₂O\nAg(OH)はすぐ分解してAg₂O（褐色）になる`,explanation:`Ag₂OはNH₃水に溶けてジアンミン銀(I)イオンになる。`},
+{id:49,category:'ag',question:`AgCl（塩化銀）の色を答えよ。`,answer:`白色`,explanation:`Ag⁺にCl⁻を加えると白色沈殿AgCl↓が生じる。`},
+{id:50,category:'ag',question:`AgBr（臭化銀）の色を答えよ。`,answer:`淡黄色`,explanation:`写真フィルムの主成分。光で分解してAg（銀）が遊離し黒変する。`},
+{id:51,category:'ag',question:`AgI（ヨウ化銀）の色を答えよ。`,answer:`黄色`,explanation:`3種のハロゲン化銀の中で最も黄色が濃い。`},
+{id:52,category:'ag',question:`ハロゲン化銀AgCl・AgBr・AgIが光で分解する反応式（AgBrを例に）を書け。`,answer:`2AgBr → 2Ag + Br₂（光分解）`,explanation:`写真フィルム・印画紙の原理。Agが析出して黒変する。`},
+{id:53,category:'ag',question:`AgClにNH₃水を加えたときの変化と反応式を答えよ。`,answer:`AgCl + 2NH₃ → [Ag(NH₃)₂]⁺ + Cl⁻\nAgClが溶けて無色の溶液になる`,explanation:`[Ag(NH₃)₂]⁺はジアンミン銀(I)イオン。`},
+{id:54,category:'ag',question:`AgBrとAgIはNH₃水に溶けるか。`,answer:`AgBr：溶けにくい\nAgI：溶けない`,explanation:`ハロゲン原子が重くなるほどNH₃水への溶解性が低下する。`},
+{id:55,category:'ag',question:`銀鏡反応の試薬の名称を答えよ。`,answer:`アンモニア性硝酸銀水溶液（トレンス試薬）`,explanation:`AgNO₃水溶液にNH₃水を加えて調製する。`},
+{id:56,category:'ag',question:`銀鏡反応でどのような物質が検出できるか。反応の概要を答えよ。`,answer:`アルデヒド（-CHO）を検出できる。\nアルデヒドにより Ag⁺ が Ag に還元され器壁に析出する（銀鏡ができる）`,explanation:`ホルムアルデヒド・アセトアルデヒドなどが検出できる。鏡の製造にも応用。`},
+{id:57,category:'ag',question:`Ag⁺とH₂Sの反応式と沈殿の色を答えよ。`,answer:`2Ag⁺ + S²⁻ → Ag₂S↓（黒色沈殿）`,explanation:`Ag₂Sは黒色で難溶性。銀製品が黒ずむのはAg₂S形成のため。`},
+{id:58,category:'zn',question:`亜鉛Znは何族か。主な酸化数を答えよ。`,answer:`第12族。酸化数：+2（Zn²⁺）`,explanation:`Znは遷移元素に分類されるが、典型元素的な性質も示す。`},
+{id:59,category:'zn',question:`亜鉛の単体の色と特徴を答えよ。`,answer:`青白色の光沢をもつ金属。両性金属（酸にもNaOHにも溶ける）。`,explanation:`密度7.14 g/cm³。融点420℃。`},
+{id:60,category:'zn',question:`ZnとHClの反応式を書け。`,answer:`Zn + 2HCl → ZnCl₂ + H₂↑`,explanation:`亜鉛は酸に溶けてH₂を発生する（両性金属の酸側）。`},
+{id:61,category:'zn',question:`ZnとNaOH水溶液の反応式を書け。`,answer:`Zn + 2NaOH + 2H₂O → Na₂[Zn(OH)₄] + H₂↑`,explanation:`亜鉛は塩基にも溶けてH₂を発生する（両性金属の塩基側）。`},
+{id:62,category:'zn',question:`Zn²⁺水溶液にNaOH水溶液（少量）を加えたときの反応式と沈殿の色を答えよ。`,answer:`Zn²⁺ + 2OH⁻ → Zn(OH)₂↓（白色沈殿）`,explanation:`白色沈殿のZn(OH)₂が生じる。`},
+{id:63,category:'zn',question:`Zn(OH)₂に過剰なNaOH水溶液を加えたときの変化を答えよ。`,answer:`Zn(OH)₂ + 2OH⁻ → [Zn(OH)₄]²⁻\n白色沈殿が溶けて無色溶液になる（両性水酸化物）`,explanation:`Zn(OH)₂はAl(OH)₃と同様に両性水酸化物。`},
+{id:64,category:'zn',question:`Zn(OH)₂に過剰なNH₃水を加えたときの変化を答えよ。`,answer:`Zn(OH)₂ + 4NH₃ → [Zn(NH₃)₄]²⁺ + 2OH⁻\n白色沈殿が溶けてテトラアンミン亜鉛(II)イオン（無色）が生成`,explanation:`[Zn(NH₃)₄]²⁺は無色。Cu²⁺の深青色と区別。`},
+{id:65,category:'zn',question:`Zn²⁺水溶液にH₂Sを通じたときの沈殿の色と化学式を答えよ。`,answer:`ZnS↓（白色沈殿）`,explanation:`ZnSは白色。酸性溶液中では沈殿せず、中性〜塩基性でのみ沈殿する。`},
+{id:66,category:'zn',question:`ZnOの両性を示す反応式を2つ書け。`,answer:`酸：ZnO + 2HCl → ZnCl₂ + H₂O\n塩基：ZnO + 2NaOH + H₂O → Na₂[Zn(OH)₄]`,explanation:`ZnOは白色の両性酸化物。日焼け止め・顔料（亜鉛華）に使われる。`},
+{id:67,category:'zn',question:`亜鉛の主な用途を2つ答えよ。`,answer:`① トタン（Znめっき鉄板）の材料\n② 乾電池の負極（亜鉛板）`,explanation:`ZnはFeよりイオン化傾向が大きいため、トタンでは傷がついてもFeが腐食しにくい。`},
+{id:68,category:'cr',question:`クロムCrは何族か。主な酸化数を2つ答えよ。`,answer:`第6族。酸化数：+3（Cr³⁺）と+6（CrO₄²⁻・Cr₂O₇²⁻）`,explanation:`ステンレス鋼（Fe-Cr-Ni）の成分。不動態を形成して耐食性をもつ。`},
+{id:69,category:'cr',question:`K₂CrO₄（クロム酸カリウム）の色を答えよ。`,answer:`黄色`,explanation:`CrO₄²⁻（クロム酸イオン）は黄色。塩基性溶液中で安定。`},
+{id:70,category:'cr',question:`K₂Cr₂O₇（ニクロム酸カリウム）の色を答えよ。`,answer:`橙赤色`,explanation:`Cr₂O₇²⁻（ニクロム酸イオン）は橙赤色。酸性溶液中で安定。強い酸化剤。`},
+{id:71,category:'cr',question:`CrO₄²⁻⇌Cr₂O₇²⁻の平衡式を書け。`,answer:`2CrO₄²⁻ + 2H⁺ ⇌ Cr₂O₇²⁻ + H₂O`,explanation:`この平衡のためpHによって色が変わる（黄色⇌橙赤色）。`},
+{id:72,category:'cr',question:`CrO₄²⁻/Cr₂O₇²⁻の平衡で、酸を加えるとどちら側に移動するか。色の変化も答えよ。`,answer:`酸を加える→右（Cr₂O₇²⁻側）に移動\n黄色→橙赤色に変化`,explanation:`酸性にするとCr₂O₇²⁻（橙赤色）が安定になる。`},
+{id:73,category:'cr',question:`CrO₄²⁻/Cr₂O₇²⁻の平衡で、塩基を加えるとどちら側に移動するか。色の変化も答えよ。`,answer:`塩基を加える→左（CrO₄²⁻側）に移動\n橙赤色→黄色に変化`,explanation:`塩基性にするとCrO₄²⁻（黄色）が安定になる。`},
+{id:74,category:'cr',question:`CrO₄²⁻にBa²⁺を加えたときの反応式と沈殿の色を答えよ。`,answer:`Ba²⁺ + CrO₄²⁻ → BaCrO₄↓（黄色沈殿）`,explanation:`BaCrO₄は黄色の難溶性塩。`},
+{id:75,category:'cr',question:`Cr³⁺水溶液にNaOH（少量）を加えたときの沈殿の色を答えよ。`,answer:`Cr(OH)₃↓（灰緑色沈殿）`,explanation:`Cr³⁺ + 3OH⁻ → Cr(OH)₃↓`},
+{id:76,category:'cr',question:`Cr(OH)₃に過剰なNaOH水溶液を加えたときの変化を答えよ。`,answer:`Cr(OH)₃ + OH⁻ → [Cr(OH)₄]⁻\n溶けて緑色の溶液になる（両性水酸化物）`,explanation:`Cr(OH)₃はAl(OH)₃・Zn(OH)₂と同様に両性水酸化物。`},
+{id:77,category:'cr',question:`Cr₂O₇²⁻が酸性溶液中で酸化剤として働くときの半反応式を書け。`,answer:`Cr₂O₇²⁻ + 14H⁺ + 6e⁻ → 2Cr³⁺ + 7H₂O`,explanation:`Crの酸化数が+6→+3に変化（6電子酸化剤）。`},
+{id:78,category:'mn',question:`マンガンMnは何族か。代表的な酸化数を3つ答えよ。`,answer:`第7族。酸化数：+2（Mn²⁺）・+4（MnO₂）・+7（MnO₄⁻）`,explanation:`KMnO₄（過マンガン酸カリウム）が最重要化合物。`},
+{id:79,category:'mn',question:`KMnO₄（過マンガン酸カリウム）の色を答えよ。`,answer:`黒紫色の結晶。水溶液は濃紫色（赤紫色）。`,explanation:`強い酸化力をもつ。`},
+{id:80,category:'mn',question:`KMnO₄が酸性溶液中での酸化剤として働くときの半反応式を書け。`,answer:`MnO₄⁻ + 8H⁺ + 5e⁻ → Mn²⁺ + 4H₂O`,explanation:`Mnの酸化数が+7→+2に変化（5電子酸化剤）。濃紫色→ほぼ無色に変化。`},
+{id:81,category:'mn',question:`KMnO₄の中性〜弱塩基性溶液中での還元生成物の色と化学式を答えよ。`,answer:`MnO₂（二酸化マンガン、黒褐色沈殿）`,explanation:`MnO₄⁻ + 2H₂O + 3e⁻ → MnO₂↓ + 4OH⁻　（酸化数+7→+4）`},
+{id:82,category:'mn',question:`MnO₂の色と代表的な用途①を答えよ（触媒）。`,answer:`黒色固体。\n用途：H₂O₂の分解触媒（2H₂O₂→2H₂O+O₂↑）`,explanation:`MnO₂を触媒として使うことでH₂O₂が常温で分解しO₂が発生する。`},
+{id:83,category:'mn',question:`MnO₂の代表的な用途②を答えよ（電池）。`,answer:`乾電池の正極材料`,explanation:`マンガン乾電池の正極にMnO₂が使われる。`},
+{id:84,category:'mn',question:`Mn²⁺水溶液にH₂Sを通じたときの沈殿の色と化学式を答えよ。`,answer:`MnS↓（淡赤色〜肌色沈殿）`,explanation:`MnSは中性〜塩基性条件でのみ沈殿する（酸性では沈殿しない）。`},
+{id:85,category:'other',question:`白金Ptはどのような酸に溶けるか。`,answer:`ほとんどの酸に溶けないが、王水（濃HNO₃：濃HCl＝1：3）には溶ける。`,explanation:`化学的に非常に安定。触媒・電極材料・装飾品に利用。`},
+{id:86,category:'other',question:`金Auはどのような酸に溶けるか。`,answer:`ほとんどの酸・塩基に溶けないが、王水（濃HNO₃：濃HCl＝1：3）にのみ溶ける。`,explanation:`Au + 王水 → HAuCl₄（塩化金酸）として溶ける。`},
+{id:87,category:'other',question:`王水の組成（体積比）と用途を答えよ。`,answer:`組成：濃塩酸：濃硝酸 ＝ 3：1（体積比）\n用途：AuやPtを溶かす`,explanation:`通常の酸に溶けない貴金属を溶かすための特殊な混合酸。`},
+{id:88,category:'other',question:`タングステンWの最も特徴的な物理的性質を答えよ。`,answer:`金属中で融点が最高（約3410℃）。`,explanation:`この高融点を活かして白熱電球のフィラメントや超硬合金の材料に使われる。`},
+{id:89,category:'other',question:`タングステンWの主な用途を2つ答えよ。`,answer:`① 白熱電球のフィラメント\n② 超硬合金（炭化タングステンWC）─切削工具`,explanation:`現在は白熱電球はLEDに置き換えられつつあるが、工業材料としては重要。`},
+{id:90,category:'other',question:`水銀Hgの特徴的な物理的性質を答えよ。`,answer:`常温で液体の唯一の金属。密度が非常に大きい（13.6 g/cm³）。`,explanation:`毒性が強く環境規制の対象（水俣病の原因物質）。`},
+{id:91,category:'other',question:`アマルガムとは何か。`,answer:`水銀（Hg）と他の金属が混ざった合金。\n例：歯科用アマルガム（Hg-Ag-Sn-Cu合金）`,explanation:`Hgは常温液体なので、他の金属を溶かして合金をつくる。`},
+{id:92,category:'other',question:`ニッケルNiの特徴と主な用途を2つ答えよ。`,answer:`特徴：銀白色。強磁性をもつ。耐食性が高い。\n用途：① ニッケル水素電池\n② ステンレス鋼（Fe-Cr-Ni）`,explanation:`白銅（Cu-Ni合金）は100円・50円硬貨の材料。`},
+{id:93,category:'other',question:`チタンTiが「夢の金属」と呼ばれる理由を答えよ。`,answer:`① 軽量（密度が小さい）\n② 高強度（鉄に近い強さ）\n③ 高耐食性（不動態形成）\nの三拍子が揃っているから。`,explanation:`航空機・医療器具（人工骨・人工関節）・スポーツ用品に利用。`},
+{id:94,category:'ion',question:`金属イオンの系統分析第1族：希HClを加えると沈殿するイオンを答えよ。`,answer:`Ag⁺（AgCl↓白色）とPb²⁺（PbCl₂↓白色）`,explanation:`AgClはNH₃水に溶け、PbCl₂は熱水に溶ける（これで分離）。`},
+{id:95,category:'ion',question:`系統分析：Ag⁺とPb²⁺をどうやって分離するか。`,answer:`希HClで両方をAg⁺→AgCl↓、Pb²⁺→PbCl₂↓として沈殿させた後、熱水を加えるとPbCl₂のみ溶けて分離できる。`,explanation:`AgClは熱水にも溶けないが、PbCl₂は熱水に溶ける。`},
+{id:96,category:'ion',question:`金属イオンの系統分析第2族：酸性溶液にH₂Sを通じると沈殿するイオンを答えよ。`,answer:`Cu²⁺（CuS↓黒色）、Pb²⁺（PbS↓黒色）など`,explanation:`酸性でもH₂Sに沈殿する硫化物（イオン化傾向の小さい金属）。`},
+{id:97,category:'ion',question:`金属イオンの系統分析第3族：NH₃水（過剰）を加えると沈殿するイオンを答えよ。`,answer:`Fe³⁺（Fe(OH)₃↓赤褐色）、Al³⁺（Al(OH)₃↓白色）`,explanation:`NH₃水は弱塩基のためFe(OH)₃・Al(OH)₃は沈殿するが溶けない。`},
+{id:98,category:'ion',question:`金属イオンの系統分析第4族：中性条件でH₂Sを通じると沈殿するイオンを答えよ。`,answer:`Zn²⁺（ZnS↓白色）、Mn²⁺（MnS↓淡赤色）`,explanation:`中性〜塩基性でH₂Sと沈殿する硫化物。第2族と条件が異なる。`},
+{id:99,category:'ion',question:`金属イオンの系統分析第5族：(NH₄)₂CO₃水溶液を加えると沈殿するイオンを答えよ。`,answer:`Ca²⁺（CaCO₃↓白色）、Ba²⁺（BaCO₃↓白色）`,explanation:`アルカリ土類金属イオンが炭酸塩として沈殿する。`},
+{id:100,category:'ion',question:`金属イオンの系統分析第6族：最後まで沈殿しないイオンと確認方法を答えよ。`,answer:`Na⁺・K⁺（アルカリ金属イオン）\n確認：炎色反応（Na→黄色、K→紫色）`,explanation:`Na⁺・K⁺は沈殿を作らないため最後に残る。`},
+{id:101,category:'ion',question:`Fe²⁺・Fe³⁺・Cu²⁺のNaOHによる水酸化物の色をそれぞれ答えよ。`,answer:`Fe²⁺：Fe(OH)₂ 緑白色\nFe³⁺：Fe(OH)₃ 赤褐色\nCu²⁺：Cu(OH)₂ 青白色`,explanation:`最頻出の沈殿の色。確実に覚える。`},
+{id:102,category:'ion',question:`Zn²⁺・Al³⁺・Pb²⁺のNaOHによる水酸化物の色と、過剰NaOHでどうなるかを答えよ。`,answer:`いずれも白色沈殿が生成。\nZn(OH)₂・Al(OH)₃・Pb(OH)₂は両性水酸化物なので、過剰NaOHに溶解する。`,explanation:`Ag⁺はAg₂O（褐色）、Mn²⁺はMn(OH)₂（白色）。`},
+{id:103,category:'ion',question:`過剰NH₃水で錯イオンをつくり溶けるイオンを3つ答えよ。錯イオンの色も答えよ。`,answer:`Cu²⁺ → [Cu(NH₃)₄]²⁺（深青色）\nAg⁺ → [Ag(NH₃)₂]⁺（無色）\nZn²⁺ → [Zn(NH₃)₄]²⁺（無色）`,explanation:`Fe³⁺・Al³⁺はNH₃水（弱塩基）では溶けない。`},
+{id:104,category:'ion',question:`H₂Sによる硫化物沈殿の色：CuS・PbS・FeSの色を答えよ。`,answer:`CuS：黒色\nPbS：黒色\nFeS：黒色`,explanation:`これら3種はいずれも黒色の硫化物。`},
+{id:105,category:'ion',question:`H₂Sによる硫化物沈殿の色：ZnS・MnSの色を答えよ。`,answer:`ZnS：白色\nMnS：淡赤色（肌色）`,explanation:`ZnSは白色、MnSは淡赤色（肌色）。黒色以外のものは頻出。`},
+{id:106,category:'ion',question:`炎色反応でNa・Kの色を答えよ。`,answer:`Na：黄色\nK：紫色`,explanation:`最重要。Na黄色は特に覚えやすい。微量でも鮮明に示す。`},
+{id:107,category:'ion',question:`炎色反応でCa・Sr・Baの色を答えよ。`,answer:`Ca：橙赤色\nSr：赤色\nBa：黄緑色`,explanation:`花火の色として利用される。`},
+{id:108,category:'ion',question:`炎色反応でLi・Cuの色を答えよ。`,answer:`Li：赤色\nCu：青緑色`,explanation:`全7元素のまとめ：Li赤、Na黄、K紫、Ca橙赤、Sr赤、Ba黄緑、Cu青緑`},
+{id:109,category:'ion',question:`イオン化傾向の大きい順（Li〜Auの11元素）を答えよ。`,answer:`Li > K > Ca > Na > Mg > Al > Zn > Fe > Ni > Sn > Pb > (H₂) > Cu > Hg > Ag > Pt > Au`,explanation:`「リッチに貸そうかな、まあ当てにすんな（ひどすぎる）」などの語呂合わせで覚える。`},
+{id:110,category:'ion',question:`黄銅・青銅・白銅・ステンレス鋼・はんだの組成をまとめよ。`,answer:`黄銅（真鍮）：Cu-Zn\n青銅（ブロンズ）：Cu-Sn\n白銅：Cu-Ni\nステンレス：Fe-Cr-Ni\nはんだ：Sn-Pb（鉛フリーははんだSn-Ag等）`,explanation:`合金は純金属より硬く、融点が低下することが多い。`},
+{id:111,category:'ion',question:`ジュラルミンの組成と特徴を答えよ。`,answer:`組成：Al-Cu-Mg合金\n特徴：アルミニウム合金の中で特に軽量・高強度`,explanation:`航空機・船体・スポーツ用品に利用される。`},
+{id:112,category:'ion',question:`ステンレス鋼の主成分と耐食性をもつ理由を答えよ。`,answer:`主成分：Fe-Cr-Ni合金\n理由：Crが不動態を形成し表面を保護するから`,explanation:`代表的な組成はFe 70%・Cr 18%・Ni 8%程度（SUS304など）。`},
+{id:113,category:'ion',question:`AgCl・AgBr・AgIのうちNH₃水に溶けるのはどれか。`,answer:`AgCl（白色）のみNH₃水に溶ける。\nAgBr（淡黄色）は溶けにくく、AgI（黄色）は溶けない。`,explanation:`ハロゲン原子が重くなるほどNH₃水への溶解性が下がる。`},
+{id:114,category:'ion',question:`Fe³⁺とFe²⁺を試薬KSCNで区別する方法を答えよ。`,answer:`KSCNを加えて血赤色になればFe³⁺が存在する。\nFe²⁺はKSCNで血赤色にならない（赤血塩K₃[Fe(CN)₆]で確認）。`,explanation:`KSCNはFe³⁺専用の確認試薬。`},
+{id:115,category:'ion',question:`Cu²⁺・Ag⁺を含む溶液にHClを加えたとき、それぞれどうなるか。`,answer:`Cu²⁺：CuCl₂は可溶のため沈殿しない\nAg⁺：AgCl↓（白色）沈殿が生じる`,explanation:`塩化物の難溶性：AgCl・PbCl₂・Hg₂Cl₂は難溶。CuCl₂は可溶。`},
+{id:116,category:'ion',question:`Fe³⁺含有水溶液にH₂Sを通じたときに起こる反応を答えよ。`,answer:`Fe³⁺がFe²⁺に還元され（H₂SはFe³⁺を還元）、FeSが沈殿する。\n2Fe³⁺ + S²⁻ → 2Fe²⁺ + S↓`,explanation:`Sが析出する場合もある。Fe³⁺は酸化剤として働く。`},
+{id:117,category:'ion',question:`Cu²⁺を含む水溶液を系統分析第2族で分離するとき、どのような条件でH₂Sを通じるか。`,answer:`酸性溶液（希硫酸などを加えた酸性条件）でH₂Sを通じる。`,explanation:`酸性条件でもCuSは沈殿するが、ZnSは酸性では沈殿しない（第4族で分離）。`},
+{id:118,category:'ion',question:`Ca²⁺・Ba²⁺を系統分析で確認・区別する方法を答えよ。`,answer:`(NH₄)₂CO₃を加えると両方ともCaCO₃↓・BaCO₃↓として沈殿。\nその後、希H₂SO₄を加えるとBa²⁺はBaSO₄↓（難溶）、Ca²⁺はCaSO₄↓（やや難溶）となり区別。`,explanation:`炎色反応でもCa（橙赤）とBa（黄緑）で区別できる。`},
+{id:119,category:'ion',question:`合金の一般的な特徴を3つ答えよ。`,answer:`① 純金属より硬くなることが多い\n② 融点が純金属より低くなることが多い\n③ 耐食性が向上することがある`,explanation:`合金は金属に他の金属や非金属を混ぜることで性質を改善した材料。`},
+{id:120,category:'ion',question:`はんだの組成と用途を答えよ。`,answer:`組成：Sn-Pb合金（鉛フリーははんだはSn-Ag等）\n用途：電子回路基板の部品溶接`,explanation:`低融点が特徴。環境規制によりPbフリーはんだへの移行が進んでいる。`},
+{id:121,category:'fe',question:`鉄の単体（Fe）の磁気的性質を答えよ。`,answer:`強磁性をもつ（磁石に引き寄せられる）。`,explanation:`CoとNiも強磁性をもつ。遷移元素に特有の性質。`},
+{id:122,category:'cu',question:`CuO（黒色）を水素H₂で還元したときの反応式を書け。`,answer:`CuO + H₂ → Cu + H₂O`,explanation:`黒色のCuOが赤色の金属Cuに変化する。還元の確認実験として重要。`},
+{id:123,category:'ag',question:`AgNO₃水溶液にNaCl水溶液を加えたときの反応式と沈殿の色を答えよ。`,answer:`Ag⁺ + Cl⁻ → AgCl↓（白色沈殿）`,explanation:`Cl⁻の検出に使われる。AgClはNH₃水に溶ける。`},
+{id:124,category:'zn',question:`亜鉛華とはどういう物質か。化学式と色を答えよ。`,answer:`ZnO（酸化亜鉛）のこと。白色固体。`,explanation:`日焼け止め・白色顔料・ゴム・ガラスなどに利用される。`},
+{id:125,category:'cr',question:`クロムは不動態を形成する。不動態とはどういう状態か。`,answer:`表面に緻密なCr₂O₃の酸化被膜が形成され、内部を保護する状態。`,explanation:`濃硝酸などとも反応しなくなる。ステンレス鋼の耐食性の原因。`},
+{id:126,category:'mn',question:`乾電池（マンガン乾電池）の正極・負極・電解質を答えよ。`,answer:`正極：MnO₂・炭素棒\n負極：亜鉛Zn（亜鉛缶）\n電解質：塩化亜鉛ZnCl₂・塩化アンモニウムNH₄Clの混合物`,explanation:`MnO₂が正極材料。Znが負極材料。`},
+{id:127,category:'other',question:`鉛蓄電池の放電時に両極に生成する物質を答えよ。`,answer:`両極ともPbSO₄（硫酸鉛(II)）が生成する。`,explanation:`正極：PbO₂→PbSO₄（還元）、負極：Pb→PbSO₄（酸化）。充電で逆に戻る。`},
+{id:128,category:'ion',question:`Fe³⁺の水溶液の色を答えよ。`,answer:`黄褐色（黄色〜褐色）`,explanation:`FeCl₃水溶液は黄褐色。Fe(OH)₃沈殿も同じ赤褐色。`},
+{id:129,category:'ion',question:`Fe²⁺の水溶液の色を答えよ。`,answer:`淡緑色`,explanation:`FeSO₄水溶液やFeCl₂水溶液は淡緑色。Fe(OH)₂沈殿は緑白色。`},
+{id:130,category:'ion',question:`Cu²⁺の水溶液の色を答えよ。`,answer:`青色`,explanation:`CuSO₄水溶液は青色。CuSO₄·5H₂O結晶も青色。`},
+];
+
+let filteredQ=[…ALL_QUESTIONS],currentIndex=0,isFlipped=false,correctCount=0,wrongCount=0,answered=new Set();
+function setFilter(cat,btn){document.querySelectorAll(’.filter-btn’).forEach(b=>b.classList.remove(‘active’));btn.classList.add(‘active’);filteredQ=cat===‘all’?[…ALL_QUESTIONS]:ALL_QUESTIONS.filter(q=>q.category===cat);restartAll();}
+function shuffleArray(arr){for(let i=arr.length-1;i>0;i–){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]];}}
+function shuffleAndReset(){shuffleArray(filteredQ);currentIndex=0;isFlipped=false;correctCount=0;wrongCount=0;answered.clear();document.getElementById(‘complete-screen’).classList.remove(‘visible’);document.getElementById(‘card-area’).style.display=’’;document.getElementById(‘result-btns’).classList.remove(‘visible’);renderCard();}
+function restartAll(){currentIndex=0;isFlipped=false;correctCount=0;wrongCount=0;answered.clear();document.getElementById(‘complete-screen’).classList.remove(‘visible’);document.getElementById(‘card-area’).style.display=’’;document.getElementById(‘result-btns’).classList.remove(‘visible’);renderCard();}
+function renderCard(){
+if(currentIndex>=filteredQ.length){showComplete();return;}
+const q=filteredQ[currentIndex],cat=CATEGORIES[q.category];
+document.getElementById(‘card-num’).textContent=`Q ${currentIndex+1} / ${filteredQ.length}`;
+[‘card-badge’,‘card-badge-back’].forEach(id=>{const el=document.getElementById(id);el.className=`card-badge ${cat.cls}`;el.textContent=cat.label;});
+document.getElementById(‘card-question’).textContent=q.question;
+document.getElementById(‘card-answer’).textContent=q.answer;
+document.getElementById(‘card-explanation’).textContent=q.explanation;
+document.getElementById(‘flashcard’).classList.remove(‘flipped’);
+isFlipped=false;document.getElementById(‘result-btns’).classList.remove(‘visible’);
+updateStats();
+}
+function flipCard(){isFlipped=!isFlipped;document.getElementById(‘flashcard’).classList.toggle(‘flipped’,isFlipped);if(isFlipped)document.getElementById(‘result-btns’).classList.add(‘visible’);}
+function markResult(correct){if(!answered.has(currentIndex)){answered.add(currentIndex);if(correct)correctCount++;else wrongCount++;}nextCard();}
+function nextCard(){if(currentIndex<filteredQ.length-1){currentIndex++;renderCard();}else showComplete();}
+function prevCard(){if(currentIndex>0){currentIndex–;renderCard();}}
+function updateStats(){
+document.getElementById(‘stat-total’).textContent=filteredQ.length;
+document.getElementById(‘stat-correct’).textContent=correctCount;
+document.getElementById(‘stat-wrong’).textContent=wrongCount;
+document.getElementById(‘stat-remain’).textContent=filteredQ.length-answered.size;
+const pct=filteredQ.length>0?Math.round((answered.size/filteredQ.length)*100):0;
+document.getElementById(‘progress-fill’).style.width=pct+’%’;
+document.getElementById(‘progress-text’).textContent=`${answered.size} / ${filteredQ.length}`;
+}
+function showComplete(){
+document.getElementById(‘card-area’).style.display=‘none’;
+document.getElementById(‘result-btns’).classList.remove(‘visible’);
+const total=answered.size,pct=total>0?Math.round((correctCount/total)*100):0;
+const emoji=pct>=90?‘🏆’:pct>=70?‘🎉’:pct>=50?‘💪’:‘📚’;
+document.getElementById(‘complete-emoji’).textContent=emoji;
+document.getElementById(‘complete-score’).textContent=`${correctCount} / ${total}`;
+document.getElementById(‘complete-sub’).textContent=`正答率 ${pct}% — ${pct>=80?'すばらしい！':pct>=60?'もう少し！':'復習しよう！'}`;
+document.getElementById(‘complete-screen’).classList.add(‘visible’);
+updateStats();
+}
+function toggleTheme(){document.body.classList.toggle(‘light’);document.querySelector(’.theme-toggle’).textContent=document.body.classList.contains(‘light’)?‘🌙’:‘☀️’;}
+renderCard();
+</script>
+
+</body>
+</html>
