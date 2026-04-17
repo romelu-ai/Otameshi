@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+　<!DOCTYPE html>
 
 <html lang="ja">
 <head>
@@ -92,8 +92,8 @@
 
 <div class="container">
   <div class="teacher-bar">
-    <span id="d-name">菊池 洋美 先生</span>
-    <span id="d-subject">[ 化学 ]</span>
+    <span id="d-name">三宅 唯 先生</span>
+    <span id="d-subject">[ 物理 ]</span>
   </div>
   <div class="teacher-card">
     <div class="teacher-info">
@@ -101,12 +101,12 @@
         <img id="d-photo" src="" alt="" style="display:none">
         <span id="d-photo-ph">写真</span>
       </div>
-      <div class="teacher-catchcopy" id="d-catchcopy">授業ではなく、化学学習の自主性を最重視し、<br>「理系の倫理観」を養成する！</div>
+      <div class="teacher-catchcopy" id="d-catchcopy">解法暗記ではなく、物理概念の直感的把握を基礎づけ<br>「自ら導けるセンス」を養成する！</div>
     </div>
     <div class="video-wrap">
       <img id="d-thumb" class="video-bg" src="" alt="" style="display:none">
       <div class="video-overlay">
-        <div class="video-title" id="d-vtitle">南高校　講師紹介 化学 菊池 洋美先生</div>
+        <div class="video-title" id="d-vtitle">東進　講師紹介 物理 三宅 唯先生</div>
         <a id="d-vlink" class="play-btn" href="#" target="_blank"></a>
       </div>
       <div class="video-label">
@@ -114,7 +114,7 @@
         <span class="yt-badge"><span class="yt-icon">▶</span> YouTube</span>
       </div>
     </div>
-    <div class="bio" id="d-bio">「理系は知っているだけではだめ、高い倫理観を持ちながらそれを行使できるかが重要」であるとし、原理・定義・法則の欠落を生む学校法人初の授業をしない授業を軸に、おじさんおばさんをリズミカルに流す。それは知識を学ぶための場所を超え、こうはなってはいけないという直感を君に与えてくれるだろう。YouTubeの乱用のみならず、それをけなす圧倒的倫理観に重点を置いた講義で、生徒の謎をひたすら放置していく。</div>
+    <div class="bio" id="d-bio">「理論は知っているだけではだめ、それを行使できるかが重要」であるとし、原理・定義・法則の定性的把握と定量的行使を軸に、自然現象をグラフィカルに解析。それは公式を振り回すだけの物理を超え、因果関係を的確に捉える直感を君に与えてくれるだろう。</div>
   </div>
 
   <div class="other-section">その他の講師陣</div>
@@ -124,7 +124,7 @@
   <!-- 編集パネル -->
 
   <div class="edit-section">
-    <button class="edit-toggle" id="et-btn" onclick="toggleEdit()">
+    <button class="edit-toggle" id="et-btn">
       ✏️ 内容を編集する <span class="arr" id="et-arr">▼</span>
     </button>
     <div class="edit-panel" id="et-panel">
@@ -134,19 +134,23 @@
         <button class="tab-btn" onclick="switchTab('t-others',this)">その他講師陣</button>
       </div>
 
+```
   <!-- メイン情報 -->
   <div class="tab-content active" id="t-main">
-    <div class="field"><label>先生名</label><input id="in-name" value="菊池 洋美 先生"></div>
-    <div class="field"><label>教科</label><input id="in-subject" value="化学"></div>
-    <div class="field"><label>キャッチコピー</label><textarea id="in-cc" rows="3">授業ではなく、化学学習の自主性を最重視し、
-「理系の倫理観」を養成する！</textarea></div>
-<div class="field"><label>動画タイトル</label><input id="in-vt" value="南高校　講師紹介 化学 菊池 洋美先生"></div>
-<div class="field"><label>紹介文</label><textarea id="in-bio" rows="5">「理系は知っているだけではだめ、高い倫理観を持ちながらそれを行使できるかが重要」であるとし、原理・定義・法則の欠落を生む学校法人初の授業をしない授業を軸に、おじさんおばさんをリズミカルに流す。それは知識を学ぶための場所を超え、こうはなってはいけないという直感を君に与えてくれるだろう。YouTubeの乱用のみならず、それをけなす圧倒的倫理観に重点を置いた講義で、生徒の謎をひたすら放置していく。</textarea></div>
+    <div class="field"><label>先生名</label><input id="in-name" value="三宅 唯 先生"></div>
+    <div class="field"><label>教科</label><input id="in-subject" value="物理"></div>
+    <div class="field"><label>キャッチコピー</label><textarea id="in-cc" rows="3">解法暗記ではなく、物理概念の直感的把握を基礎づけ
+```
+
+「自ら導けるセンス」を養成する！</textarea></div>
+<div class="field"><label>動画タイトル</label><input id="in-vt" value="東進　講師紹介 物理 三宅 唯先生"></div>
+<div class="field"><label>紹介文</label><textarea id="in-bio" rows="5">「理論は知っているだけではだめ、それを行使できるかが重要」であるとし、原理・定義・法則の定性的把握と定量的行使を軸に、自然現象をグラフィカルに解析。それは公式を振り回すだけの物理を超え、因果関係を的確に捉える直感を君に与えてくれるだろう。</textarea></div>
 <div class="field"><label>先生の写真</label><input type="file" id="in-photo" accept="image/*"></div>
 <div class="field"><label>動画サムネイル</label><input type="file" id="in-thumb" accept="image/*"></div>
 <button class="abtn abtn-orange" onclick="applyMain()">メイン情報を反映する</button>
 </div>
 
+```
   <!-- リンク設定 -->
   <div class="tab-content" id="t-links">
     <div class="field"><label>「資料請求」リンク先URL</label><input type="url" id="url-shiryo" placeholder="https://"></div>
@@ -166,34 +170,39 @@
       <div class="field"><label>教科</label><input id="add-subj" placeholder="数学"></div>
       <div class="field"><label>クリック先URL</label><input type="url" id="add-url" placeholder="https://"></div>
       <div class="field"><label>顔写真</label><input type="file" id="add-photo" accept="image/*"></div>
-      <button class="abtn abtn-teal" onclick="addOther()">この講師を追加する</button>
+      <button class="abtn abtn-teal" id="add-other-btn">この講師を追加する</button>
     </div>
     <br>
     <button class="abtn abtn-dark" onclick="savePage()">💾 このページをHTMLで保存する</button>
     <p class="save-note">全設定・画像込みの1ファイルHTMLをダウンロードします</p>
   </div>
 </div>
+```
 
   </div>
 </div>
 
 <script>
 var S = {
-  name:'菊池 洋美 先生', subject:'化学',
-  cc:'授業ではなく、化学学習の自主性を最重視し、
-反面教師であり続け、「理系の倫理観」を養成する！',
-  vt:'南高校　講師紹介 化学 菊池 洋美先生',
-  bio:'「理系は知っているだけではだめ、高い倫理観を持ちながらそれを行使できるかが重要」であるとし、原理・定義・法則の欠落を生む学校法人初の授業をしない授業を軸に、おじさんおばさんをリズミカルに流す。それは知識を学ぶための場所を超え、こうはなってはいけないという直感を君に与えてくれるだろう。YouTubeの乱用のみならず、それをけなす圧倒的倫理観に重点を置いた講義で、生徒の謎をひたすら放置していく。',
+  name:'三宅 唯 先生', subject:'物理',
+  cc:'解法暗記ではなく、物理概念の直感的把握を基礎づけ\n「自ら導けるセンス」を養成する！',
+  vt:'東進　講師紹介 物理 三宅 唯先生',
+  bio:'「理論は知っているだけではだめ、それを行使できるかが重要」であるとし、原理・定義・法則の定性的把握と定量的行使を軸に、自然現象をグラフィカルに解析。それは公式を振り回すだけの物理を超え、因果関係を的確に捉える直感を君に与えてくれるだろう。',
   photoSrc:'', thumbSrc:'',
   urls:{shiryo:'',kobetsu:'',taiken:'',motto:'',video:''},
   others:[]
 };
 
 function toggleEdit(){
-  var p=document.getElementById('et-panel'), a=document.getElementById('et-arr');
-  var open=p.style.display==='block';
-  p.style.display=open?'none':'block';
-  a.style.transform=open?'':'rotate(180deg)';
+  var p=document.getElementById('et-panel');
+  var a=document.getElementById('et-arr');
+  if(p.style.display===''||p.style.display==='none'){
+    p.style.display='block';
+    a.textContent='▲';
+  } else {
+    p.style.display='none';
+    a.textContent='▼';
+  }
 }
 function switchTab(id,el){
   document.querySelectorAll('.tab-content').forEach(function(t){t.classList.remove('active');});
@@ -243,7 +252,8 @@ function addOther(){
   var subj=document.getElementById('add-subj').value.trim();
   var url =document.getElementById('add-url').value.trim();
   var file=document.getElementById('add-photo').files[0];
-  if(!name){alert('名前を入力してください');return;}
+  if(!name){document.getElementById('add-name').style.border='2px solid red';return;}
+  document.getElementById('add-name').style.border='';
   function fin(src){
     S.others.push({name:name,subj:subj,url:url,src:src});
     renderOthers();
@@ -294,7 +304,8 @@ function savePage(){
     '<meta name="viewport" content="width=device-width, initial-scale=1.0">\n'+
     '<title>'+esc(S.name)+' 講師紹介</title>\n<style>'+css+'</style>\n</head>\n<body>\n'+
 
-'<div class="site-header"><div class="site-title">南高校<span>.</span>com</div></div>\n'+
+```
+'<div class="site-header"><div class="site-title">予備校<span>.</span>com</div></div>\n'+
 '<div class="header-btns">'+
   '<a class="header-btn btn-orange" href="'+(S.urls.shiryo||'#')+'" target="_blank">資料請求▶</a>'+
   '<a class="header-btn btn-blue" href="'+(S.urls.kobetsu||'#')+'" target="_blank">個別相談▶</a>'+
@@ -321,6 +332,7 @@ function savePage(){
 '<div class="other-teachers">'+othersHtml+'</div>\n'+
 '<div class="footer-arrow"><button class="arrow-btn" onclick="window.scrollTo({top:0,behavior:\'smooth\'})">▲</button></div>\n'+
 '</div>\n</body>\n</html>';
+```
 
 var blob=new Blob([html],{type:‘text/html;charset=utf-8’});
 var a=document.createElement(‘a’); a.href=URL.createObjectURL(blob);
@@ -329,6 +341,12 @@ a.download=‘teacher_profile_saved.html’; a.click();
 
 function readF(file,cb){ var r=new FileReader(); r.onload=function(e){cb(e.target.result);}; r.readAsDataURL(file); }
 function esc(s){ return String(s||’’).replace(/&/g,’&’).replace(/</g,’<’).replace(/>/g,’>’).replace(/”/g,’"’); }
+
+// イベントリスナーをまとめて登録
+document.addEventListener(‘DOMContentLoaded’, function(){
+document.getElementById(‘et-btn’).addEventListener(‘click’, toggleEdit);
+document.getElementById(‘add-other-btn’).addEventListener(‘click’, addOther);
+});
 </script>
 
 </body>
