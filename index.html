@@ -196,6 +196,31 @@
 }
 .backup-import-btn:hover { background: #222; }
 
+/* ── バックアップバー ── */
+.backup-bar {
+  background: #1a1a2e; color: #fff;
+  padding: 16px; margin-top: 0;
+  max-width: 700px; margin-left: auto; margin-right: auto;
+}
+.backup-title { font-size: .88rem; font-weight: 700; margin-bottom: 6px; color: #aad4ff; }
+.backup-note {
+  font-size: .74rem; line-height: 1.7; color: #b0b8c8; margin-bottom: 12px;
+  background: rgba(255,255,255,.06); padding: 8px 10px; border-radius: 4px;
+}
+.backup-btns { display: flex; gap: 8px; }
+.backup-export-btn {
+  flex: 1; padding: 11px 8px; background: #00a99d; color: #fff;
+  border: none; border-radius: 6px; font-size: .82rem; font-weight: 700;
+  cursor: pointer; font-family: inherit;
+}
+.backup-export-btn:hover { background: #007a72; }
+.backup-import-btn {
+  flex: 1; padding: 11px 8px; background: #444; color: #fff;
+  border-radius: 6px; font-size: .82rem; font-weight: 700;
+  cursor: pointer; text-align: center; display: block;
+}
+.backup-import-btn:hover { background: #222; }
+
 /* ── フッター ── */
 .footer-arrow { text-align: right; padding: 8px 12px; background: #fff; border-top: 1px solid #e0e0e0; }
 .arrow-btn {
@@ -587,6 +612,31 @@ function exportData() {
   a.download = 'minami-school-data.json';
   a.click();
   URL.revokeObjectURL(url);
+}
+
+/* ── インポート：JSONファイルを読み込んでlocalStorageに一括復元 ── */
+function importData(input) {
+  var file = input.files[0];
+  if (!file) return;
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      var data = JSON.parse(e.target.result);
+      var count = 0;
+      Object.keys(data).forEach(function(key) {
+        if (key.indexOf('minami_') === 0) {
+          localStorage.setItem(key, JSON.stringify(data[key]));
+          count++;
+        }
+      });
+      alert('✅ インポート完了！\n' + count + '件のデータを復元しました。\nページを再読み込みします。');
+      location.reload();
+    } catch(err) {
+      alert('❌ 読み込みに失敗しました。\n正しいJSONファイルを選択してください。');
+    }
+  };
+  reader.readAsText(file);
+  input.value = '';
 }
 
 /* ── 初期化 ── */
