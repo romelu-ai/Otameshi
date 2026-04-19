@@ -8,184 +8,144 @@
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body { font-family: 'Hiragino Kaku Gothic ProN', 'Meiryo', sans-serif; background: #f0f0f0; color: #333; }
 
-  .site-header {
-    background: #fff;
-    border-bottom: 3px solid #00a99d;
-    padding: 10px 16px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
+  .site-header { background: #fff; border-bottom: 3px solid #00a99d; padding: 10px 16px; display: flex; align-items: center; justify-content: space-between; }
   .site-title { font-size: 1.4rem; font-weight: 900; color: #00a99d; letter-spacing: -.5px; }
   .site-title span { color: #f05a28; }
 
   .header-btns { display: flex; gap: 0; overflow: hidden; }
-  .header-btn {
-    padding: 10px 14px; font-size: .78rem; font-weight: 700; color: #fff;
-    border: none; cursor: pointer; text-align: center; flex: 1;
-    text-decoration: none; display: flex; align-items: center; justify-content: center;
-    transition: opacity .15s;
-  }
+  .header-btn { padding: 10px 14px; font-size: .78rem; font-weight: 700; color: #fff; border: none; cursor: pointer; text-align: center; flex: 1; text-decoration: none; display: flex; align-items: center; justify-content: center; transition: opacity .15s; }
   .header-btn:hover { opacity: .85; }
-  .btn-orange { background: #f05a28; }
-  .btn-blue   { background: #1a6ab8; }
-  .btn-red    { background: #e0001b; }
-  .btn-teal   { background: #00a99d; }
+  .btn-orange { background: #f05a28; } .btn-blue { background: #1a6ab8; } .btn-red { background: #e0001b; } .btn-teal { background: #00a99d; }
 
   .container { max-width: 700px; margin: 0 auto; background: #fff; }
-
-  .page-title-bar {
-    background: #00a99d; color: #fff;
-    padding: 12px 16px; font-size: 1.05rem; font-weight: 700;
-    margin-top: 10px;
-    display: flex; align-items: center; gap: 8px;
-  }
-
+  .page-title-bar { background: #00a99d; color: #fff; padding: 12px 16px; font-size: 1.05rem; font-weight: 700; margin-top: 10px; }
   .back-link-wrap { padding: 10px 14px; }
-  .back-link {
-    display: inline-block; padding: 6px 14px;
-    background: #00a99d; color: #fff; border-radius: 20px;
-    font-size: .8rem; font-weight: 700; text-decoration: none;
-    transition: opacity .15s;
-  }
+  .back-link { display: inline-block; padding: 6px 14px; background: #00a99d; color: #fff; border-radius: 20px; font-size: .8rem; font-weight: 700; text-decoration: none; }
   .back-link:hover { opacity: .8; }
 
-  /* ── 教科フィルター ── */
-  .filter-bar {
-    padding: 10px 12px; background: #f7f9fb;
-    border-top: 1px solid #e0e0e0; border-bottom: 1px solid #e0e0e0;
-    display: flex; gap: 6px; flex-wrap: wrap;
-  }
-  .filter-btn {
-    padding: 5px 12px; border-radius: 20px; border: 1.5px solid #00a99d;
-    background: #fff; color: #00a99d; font-size: .78rem; font-weight: 700;
-    cursor: pointer; transition: all .15s; font-family: inherit;
-  }
-  .filter-btn.active, .filter-btn:hover {
-    background: #00a99d; color: #fff;
-  }
+  /* フィルター */
+  .filter-bar { padding: 10px 12px; background: #f7f9fb; border-top: 1px solid #e0e0e0; border-bottom: 1px solid #e0e0e0; display: flex; gap: 6px; flex-wrap: wrap; }
+  .filter-btn { padding: 5px 12px; border-radius: 20px; border: 1.5px solid #00a99d; background: #fff; color: #00a99d; font-size: .78rem; font-weight: 700; cursor: pointer; transition: all .15s; font-family: inherit; }
+  .filter-btn.active, .filter-btn:hover { background: #00a99d; color: #fff; }
 
-  /* ── 講師カードグリッド ── */
-  .teachers-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 12px;
-    padding: 14px 12px;
-  }
+  /* グリッド */
+  .teachers-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; padding: 14px 12px; }
 
+  /* カード */
+  .teacher-card-wrap { position: relative; }
   .teacher-card {
     border: 2px solid #e0e0e0; border-radius: 8px; overflow: hidden;
     background: #fff; text-decoration: none; color: #333;
-    transition: border-color .15s, box-shadow .15s;
-    display: block;
+    transition: border-color .15s, box-shadow .15s; display: block;
   }
   .teacher-card:hover { border-color: #00a99d; box-shadow: 0 3px 12px rgba(0,169,157,.15); }
-
-  .card-thumb {
-    width: 100%; height: 120px;
-    background: #ddd; display: flex; align-items: center; justify-content: center;
-    font-size: 2.5rem; color: #bbb; overflow: hidden;
-  }
+  .card-thumb { width: 100%; height: 120px; background: #eee; display: flex; align-items: center; justify-content: center; font-size: 2.8rem; color: #bbb; overflow: hidden; }
   .card-thumb img { width: 100%; height: 100%; object-fit: cover; }
-
   .card-body { padding: 10px 10px 12px; }
-  .card-subject-badge {
-    display: inline-block; background: #00a99d; color: #fff;
-    font-size: .7rem; font-weight: 700; padding: 2px 8px;
-    border-radius: 10px; margin-bottom: 6px;
-  }
+  .card-subject-badge { display: inline-block; background: #00a99d; color: #fff; font-size: .7rem; font-weight: 700; padding: 2px 8px; border-radius: 10px; margin-bottom: 6px; }
   .card-name { font-size: .95rem; font-weight: 700; margin-bottom: 4px; }
   .card-catch { font-size: .75rem; color: #666; line-height: 1.5; }
+  .card-page { font-size: .7rem; color: #aaa; margin-top: 5px; word-break: break-all; }
 
-  /* ── 追加フォーム（折りたたみ） ── */
-  .add-toggle-bar {
-    background: #f05a28; color: #fff; font-size: .88rem; font-weight: 700;
-    padding: 10px 14px; cursor: pointer; display: flex; justify-content: space-between;
-    align-items: center; user-select: none; margin-top: 10px;
+  /* カード上の操作ボタン */
+  .card-actions {
+    display: flex; gap: 4px; padding: 6px 8px;
+    border-top: 1px solid #f0f0f0; background: #fafafa;
   }
+  .card-edit-btn, .card-del-btn {
+    flex: 1; padding: 5px 0; border: none; border-radius: 4px;
+    font-size: .75rem; font-weight: 700; cursor: pointer; font-family: inherit;
+  }
+  .card-edit-btn { background: #1a6ab8; color: #fff; }
+  .card-edit-btn:hover { background: #0d4f9e; }
+  .card-del-btn  { background: #e0e0e0; color: #666; }
+  .card-del-btn:hover  { background: #c00; color: #fff; }
+
+  /* ── 編集モーダル ── */
+  .modal-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,.5); z-index: 100;
+    align-items: center; justify-content: center;
+    padding: 16px;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: #fff; border-radius: 10px; width: 100%; max-width: 480px;
+    max-height: 90vh; overflow-y: auto;
+    box-shadow: 0 8px 32px rgba(0,0,0,.25);
+  }
+  .modal-header {
+    background: #1a6ab8; color: #fff; padding: 12px 16px;
+    display: flex; justify-content: space-between; align-items: center;
+    border-radius: 10px 10px 0 0; position: sticky; top: 0; z-index: 1;
+  }
+  .modal-header h2 { font-size: .95rem; font-weight: 700; }
+  .modal-close { background: none; border: none; color: #fff; font-size: 1.3rem; cursor: pointer; line-height: 1; }
+  .modal-body { padding: 16px; }
+  .field { margin-bottom: 12px; }
+  .field label { display: block; font-size: .78rem; font-weight: 700; color: #555; margin-bottom: 4px; }
+  .field input, .field textarea { width: 100%; padding: 8px 10px; border: 1.5px solid #c0c0c0; border-radius: 4px; font-size: .85rem; font-family: inherit; background: #fff; }
+  .field input:focus, .field textarea:focus { outline: none; border-color: #1a6ab8; }
+  .field input[type=file] { padding: 4px; border: 1px solid #c0c0c0; }
+  .field textarea { resize: vertical; min-height: 60px; }
+  .field-note { font-size: .72rem; color: #888; margin-top: 4px; background: #f5f5f5; padding: 5px 7px; border-radius: 4px; line-height: 1.5; }
+  .modal-footer { display: flex; gap: 8px; padding: 0 16px 16px; }
+  .save-btn { flex: 1; padding: 11px; background: #1a6ab8; color: #fff; border: none; border-radius: 6px; font-size: .9rem; font-weight: 700; cursor: pointer; font-family: inherit; }
+  .save-btn:hover { background: #0d4f9e; }
+  .cancel-btn { padding: 11px 16px; background: #e0e0e0; color: #555; border: none; border-radius: 6px; font-size: .9rem; font-weight: 700; cursor: pointer; font-family: inherit; }
+  .cancel-btn:hover { background: #c8c8c8; }
+
+  /* ── 追加パネル ── */
+  .add-toggle-bar { background: #f05a28; color: #fff; font-size: .88rem; font-weight: 700; padding: 10px 14px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; user-select: none; margin-top: 10px; }
   .add-toggle-bar:hover { background: #d44a1a; }
   .add-toggle-bar .arrow { font-size: .75rem; transition: transform .25s; }
   .add-toggle-bar.open .arrow { transform: rotate(180deg); }
-
-  .add-panel {
-    background: #fff8f5; border: 2px solid #f05a28; border-top: none;
-    padding: 18px 14px; display: none;
-  }
+  .add-panel { background: #fff8f5; border: 2px solid #f05a28; border-top: none; padding: 18px 14px; display: none; }
   .add-panel.open { display: block; }
   .add-panel h3 { font-size: .9rem; color: #f05a28; font-weight: 700; margin-bottom: 14px; }
-
-  .field { margin-bottom: 12px; }
-  .field label { display: block; font-size: .78rem; font-weight: 700; color: #555; margin-bottom: 4px; }
-  .field input, .field textarea, .field select {
-    width: 100%; padding: 8px 10px; border: 1px solid #c0c0c0;
-    border-radius: 4px; font-size: .85rem; font-family: inherit; background: #fff;
-  }
-  .field input[type=file] { padding: 4px; }
-
   .btn-row { display: flex; gap: 8px; margin-top: 10px; }
-  .add-btn {
-    flex: 1; padding: 11px; background: #f05a28; color: #fff;
-    border: none; border-radius: 6px; font-size: .9rem; font-weight: 700;
-    cursor: pointer; font-family: inherit;
-  }
+  .add-btn { flex: 1; padding: 11px; background: #f05a28; color: #fff; border: none; border-radius: 6px; font-size: .9rem; font-weight: 700; cursor: pointer; font-family: inherit; }
   .add-btn:hover { background: #d44a1a; }
-  .clear-btn {
-    padding: 11px 18px; background: #888; color: #fff;
-    border: none; border-radius: 6px; font-size: .9rem; font-weight: 700;
-    cursor: pointer; font-family: inherit;
-  }
-  .clear-btn:hover { background: #555; }
+  .reset-btn { padding: 11px 16px; background: #888; color: #fff; border: none; border-radius: 6px; font-size: .9rem; font-weight: 700; cursor: pointer; font-family: inherit; }
+  .reset-btn:hover { background: #555; }
 
   .empty-msg { text-align: center; color: #aaa; font-size: .85rem; padding: 30px; }
-
   .footer-arrow { text-align: right; padding: 8px 12px; border-top: 1px solid #e0e0e0; }
-  .arrow-btn {
-    display: inline-block; background: #888; color: #fff; width: 32px; height: 32px;
-    border-radius: 50%; font-size: 1rem; line-height: 32px; text-align: center;
-    cursor: pointer; border: none;
-  }
+  .arrow-btn { display: inline-block; background: #888; color: #fff; width: 32px; height: 32px; border-radius: 50%; font-size: 1rem; line-height: 32px; text-align: center; cursor: pointer; border: none; }
 </style>
 </head>
 <body>
 
-<!-- ヘッダー -->
 <div class="site-header">
   <div class="site-title">南高校<span>.</span>com</div>
   <div style="font-size:.7rem;color:#888">予備校・大学受験</div>
 </div>
 <div class="header-btns">
-  <a href="request.html"  class="header-btn btn-orange">資料請求▶</a>
-  <a href="consult.html"  class="header-btn btn-blue">個別相談▶</a>
-  <a href="trial.html"    class="header-btn btn-red">今すぐ体験▶</a>
-  <a href="about.html"    class="header-btn btn-teal">もっと知りたい▶</a>
+  <a href="request.html" class="header-btn btn-orange">資料請求▶</a>
+  <a href="consult.html" class="header-btn btn-blue">個別相談▶</a>
+  <a href="trial.html"   class="header-btn btn-red">今すぐ体験▶</a>
+  <a href="about.html"   class="header-btn btn-teal">もっと知りたい▶</a>
 </div>
 
 <div class="container">
   <div class="page-title-bar">👩‍🏫 講師陣一覧</div>
+  <div class="back-link-wrap"><a href="index.html" class="back-link">← 講師トップへ</a></div>
 
-  <div class="back-link-wrap">
-    <a href="index.html" class="back-link">← 講師トップへ</a>
-  </div>
-
-  <!-- 教科フィルター -->
   <div class="filter-bar" id="filter-bar">
     <button class="filter-btn active" onclick="filterBy('all', this)">すべて</button>
-    <!-- JSで追加 -->
   </div>
 
-  <!-- 講師グリッド -->
   <div class="teachers-grid" id="teachers-grid"></div>
 
   <div class="footer-arrow"><button class="arrow-btn" onclick="window.scrollTo({top:0,behavior:'smooth'})">▲</button></div>
 
   <!-- 講師追加パネル -->
   <div class="add-toggle-bar" id="add-toggle" onclick="toggleAdd()">
-    <span>➕ 講師を追加・編集する</span>
+    <span>➕ 講師を新規追加する</span>
     <span class="arrow">▼</span>
   </div>
   <div class="add-panel" id="add-panel">
-    <h3>講師情報を入力</h3>
-
+    <h3>新しい講師を追加</h3>
     <div class="field">
       <label>先生名（例：山田 太郎 先生）</label>
       <input type="text" id="add-name" placeholder="○○ ○○ 先生">
@@ -199,23 +159,61 @@
       <textarea id="add-catch" rows="2" placeholder="先生の一言紹介…"></textarea>
     </div>
     <div class="field">
-      <label>プロフィールページのURL（例：teacher-math.html）</label>
-      <input type="text" id="add-page" placeholder="teacher-xxx.html">
+      <label>プロフィールページのファイル名</label>
+      <input type="text" id="add-page" placeholder="teacher-xxx.html（空白で自動生成）">
+      <div class="field-note">index.htmlをコピーしてこの名前で保存すると、そのページの編集内容も保持されます。</div>
     </div>
     <div class="field">
-      <label>顔写真</label>
+      <label>顔写真（任意）</label>
       <input type="file" id="add-photo" accept="image/*">
     </div>
-
     <div class="btn-row">
       <button class="add-btn" onclick="addTeacher()">追加する</button>
-      <button class="clear-btn" onclick="clearAll()">全リセット</button>
+      <button class="reset-btn" onclick="resetAll()">全リセット</button>
+    </div>
+  </div>
+</div>
+
+<!-- 編集モーダル -->
+<div class="modal-overlay" id="edit-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 id="modal-title">講師情報を編集</h2>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="edit-index">
+      <div class="field">
+        <label>先生名</label>
+        <input type="text" id="edit-name" placeholder="○○ ○○ 先生">
+      </div>
+      <div class="field">
+        <label>教科</label>
+        <input type="text" id="edit-subject" placeholder="化学 / 数学 …">
+      </div>
+      <div class="field">
+        <label>キャッチコピー</label>
+        <textarea id="edit-catch" rows="2"></textarea>
+      </div>
+      <div class="field">
+        <label>プロフィールページのファイル名</label>
+        <input type="text" id="edit-page" placeholder="teacher-xxx.html">
+        <div class="field-note">ファイル名を変更すると、これまでそのページで保存した編集内容とのリンクが外れます。変更は慎重に。</div>
+      </div>
+      <div class="field">
+        <label>顔写真を変更（任意）</label>
+        <input type="file" id="edit-photo" accept="image/*">
+        <div class="field-note">選択しなければ現在の写真を維持します。</div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="save-btn" onclick="saveEdit()">保存する</button>
+      <button class="cancel-btn" onclick="closeModal()">キャンセル</button>
     </div>
   </div>
 </div>
 
 <script>
-/* ── データ管理 ── */
 var STORAGE_KEY = 'minami_teachers';
 
 var defaultTeachers = [
@@ -228,12 +226,8 @@ var defaultTeachers = [
 ];
 
 function loadTeachers() {
-  try {
-    var stored = localStorage.getItem(STORAGE_KEY);
-    return stored ? JSON.parse(stored) : defaultTeachers;
-  } catch(e) {
-    return defaultTeachers;
-  }
+  try { var s = localStorage.getItem(STORAGE_KEY); return s ? JSON.parse(s) : defaultTeachers.map(function(t){ return Object.assign({},t); }); }
+  catch(e) { return defaultTeachers.map(function(t){ return Object.assign({},t); }); }
 }
 function saveTeachers(list) {
   try { localStorage.setItem(STORAGE_KEY, JSON.stringify(list)); } catch(e) {}
@@ -245,21 +239,16 @@ var currentFilter = 'all';
 /* ── フィルター ── */
 function buildFilterBar() {
   var bar = document.getElementById('filter-bar');
-  // 既存ボタン（「すべて」以外）削除
   while (bar.children.length > 1) bar.removeChild(bar.lastChild);
   var subjects = [];
-  teachers.forEach(function(t) {
-    if (subjects.indexOf(t.subject) === -1) subjects.push(t.subject);
-  });
+  teachers.forEach(function(t) { if (subjects.indexOf(t.subject) === -1) subjects.push(t.subject); });
   subjects.forEach(function(s) {
     var btn = document.createElement('button');
-    btn.className = 'filter-btn';
-    btn.textContent = s;
+    btn.className = 'filter-btn'; btn.textContent = s;
     btn.onclick = function() { filterBy(s, this); };
     bar.appendChild(btn);
   });
 }
-
 function filterBy(key, btn) {
   currentFilter = key;
   document.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('active'); });
@@ -272,15 +261,18 @@ function renderGrid() {
   var grid = document.getElementById('teachers-grid');
   grid.innerHTML = '';
   var list = currentFilter === 'all'
-    ? teachers
-    : teachers.filter(function(t) { return t.subject === currentFilter; });
+    ? teachers.map(function(t, i){ return { t: t, i: i }; })
+    : teachers.reduce(function(acc, t, i){ if (t.subject === currentFilter) acc.push({ t: t, i: i }); return acc; }, []);
 
   if (list.length === 0) {
-    grid.innerHTML = '<div class="empty-msg">講師が登録されていません。</div>';
+    grid.innerHTML = '<div class="empty-msg">該当する講師が見つかりません。</div>';
     return;
   }
-  list.forEach(function(t) {
-    // 各講師ページのprofileから写真を優先取得
+
+  list.forEach(function(item) {
+    var t = item.t, idx = item.i;
+
+    // プロフィールページの写真を優先取得
     var photo = '';
     try {
       var ps = localStorage.getItem('minami_profile__' + (t.page || ''));
@@ -288,29 +280,112 @@ function renderGrid() {
     } catch(e) {}
     if (!photo) photo = t.photo || '';
 
+    var wrap = document.createElement('div');
+    wrap.className = 'teacher-card-wrap';
+
+    // カード本体（クリックでページへ）
     var a = document.createElement('a');
     a.className = 'teacher-card';
     a.href = t.page || '#';
+    var thumbHtml = photo ? '<img src="' + photo + '" alt="' + t.name + '">' : '<span>👤</span>';
+    a.innerHTML =
+      '<div class="card-thumb">' + thumbHtml + '</div>' +
+      '<div class="card-body">' +
+        '<span class="card-subject-badge">' + (t.subject||'') + '</span>' +
+        '<div class="card-name">' + (t.name||'') + '</div>' +
+        '<div class="card-catch">' + (t.catch||'') + '</div>' +
+        '<div class="card-page">📄 ' + (t.page||'') + '</div>' +
+      '</div>';
 
-    var thumbHtml = photo
-      ? '<img src="' + photo + '" alt="' + t.name + '">'
-      : '<span style="font-size:2.8rem">👤</span>';
-    a.innerHTML = '<div class="card-thumb">' + thumbHtml + '</div>'
-      + '<div class="card-body">'
-      + '<span class="card-subject-badge">' + (t.subject||'') + '</span>'
-      + '<div class="card-name">' + (t.name||'') + '</div>'
-      + '<div class="card-catch">' + (t.catch||'') + '</div>'
-      + '</div>';
-    grid.appendChild(a);
+    // 操作ボタン行
+    var actions = document.createElement('div');
+    actions.className = 'card-actions';
+
+    var editBtn = document.createElement('button');
+    editBtn.className = 'card-edit-btn';
+    editBtn.textContent = '✏️ 編集';
+    editBtn.onclick = function(e) { e.preventDefault(); openEditModal(idx); };
+
+    var delBtn = document.createElement('button');
+    delBtn.className = 'card-del-btn';
+    delBtn.textContent = '🗑 削除';
+    delBtn.onclick = function(e) { e.preventDefault(); deleteTeacher(idx); };
+
+    actions.appendChild(editBtn);
+    actions.appendChild(delBtn);
+
+    wrap.appendChild(a);
+    wrap.appendChild(actions);
+    grid.appendChild(wrap);
   });
 }
 
-/* ── 追加 ── */
+/* ── 削除 ── */
+function deleteTeacher(idx) {
+  var t = teachers[idx];
+  if (!confirm('「' + t.name + '」を一覧から削除しますか？\n（プロフィールページのファイルは削除されません）')) return;
+  teachers.splice(idx, 1);
+  saveTeachers(teachers);
+  buildFilterBar();
+  renderGrid();
+}
+
+/* ── 編集モーダル ── */
+function openEditModal(idx) {
+  var t = teachers[idx];
+  document.getElementById('edit-index').value   = idx;
+  document.getElementById('modal-title').textContent = '編集：' + t.name;
+  document.getElementById('edit-name').value    = t.name    || '';
+  document.getElementById('edit-subject').value = t.subject || '';
+  document.getElementById('edit-catch').value   = t.catch   || '';
+  document.getElementById('edit-page').value    = t.page    || '';
+  document.getElementById('edit-photo').value   = '';
+  document.getElementById('edit-modal').classList.add('open');
+}
+function closeModal() {
+  document.getElementById('edit-modal').classList.remove('open');
+}
+// モーダル外クリックで閉じる
+document.getElementById('edit-modal').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+
+function saveEdit() {
+  var idx     = parseInt(document.getElementById('edit-index').value, 10);
+  var name    = document.getElementById('edit-name').value.trim();
+  var subject = document.getElementById('edit-subject').value.trim();
+  var cat     = document.getElementById('edit-catch').value.trim();
+  var page    = document.getElementById('edit-page').value.trim();
+  var photoFile = document.getElementById('edit-photo').files[0];
+
+  if (!name || !subject) { alert('先生名と教科は必須です。'); return; }
+  if (page && !/\.html$/.test(page)) page += '.html';
+
+  function commit(photoData) {
+    teachers[idx].name    = name;
+    teachers[idx].subject = subject;
+    teachers[idx].catch   = cat;
+    if (page) teachers[idx].page = page;
+    if (photoData) teachers[idx].photo = photoData;
+    saveTeachers(teachers);
+    buildFilterBar();
+    renderGrid();
+    closeModal();
+  }
+
+  if (photoFile) {
+    var r = new FileReader();
+    r.onload = function(e) { commit(e.target.result); };
+    r.readAsDataURL(photoFile);
+  } else {
+    commit(null);
+  }
+}
+
+/* ── 追加パネル ── */
 function toggleAdd() {
-  var bar   = document.getElementById('add-toggle');
-  var panel = document.getElementById('add-panel');
-  bar.classList.toggle('open');
-  panel.classList.toggle('open');
+  document.getElementById('add-toggle').classList.toggle('open');
+  document.getElementById('add-panel').classList.toggle('open');
 }
 
 function addTeacher() {
@@ -321,13 +396,7 @@ function addTeacher() {
   var photoFile = document.getElementById('add-photo').files[0];
 
   if (!name || !subject) { alert('先生名と教科は必須です。'); return; }
-
-  /* ページURLが空なら自動生成（名前をローマ字変換できないのでインデックスで代替） */
-  if (!page) {
-    var idx = teachers.length + 1;
-    page = 'teacher-' + idx + '.html';
-  }
-  /* .html が付いていなければ補完 */
+  if (!page) page = 'teacher-' + (teachers.length + 1) + '.html';
   if (!/\.html$/.test(page)) page += '.html';
 
   function save(photoData) {
@@ -335,25 +404,20 @@ function addTeacher() {
     saveTeachers(teachers);
     buildFilterBar();
     renderGrid();
-    ['add-name','add-subject','add-catch','add-page'].forEach(function(id) {
-      document.getElementById(id).value = '';
-    });
+    ['add-name','add-subject','add-catch','add-page'].forEach(function(id){ document.getElementById(id).value = ''; });
     document.getElementById('add-photo').value = '';
-    alert('追加しました！\nプロフィールページ: ' + page + '\n\nindex.htmlをコピーして同名で保存すれば、そのページでも編集内容が保持されます。');
+    alert('追加しました！\nページファイル名: ' + page);
   }
 
   if (photoFile) {
-    var r = new FileReader();
-    r.onload = function(e) { save(e.target.result); };
-    r.readAsDataURL(photoFile);
-  } else {
-    save('');
-  }
+    var r = new FileReader(); r.onload = function(e){ save(e.target.result); }; r.readAsDataURL(photoFile);
+  } else { save(''); }
 }
 
-function clearAll() {
-  if (!confirm('全ての講師データをリセットしますか？\n（デフォルトに戻ります）')) return;
-  teachers = defaultTeachers.slice();
+/* ── 全リセット ── */
+function resetAll() {
+  if (!confirm('全講師データをデフォルトに戻しますか？\n追加・編集した内容はすべて消えます。')) return;
+  teachers = defaultTeachers.map(function(t){ return Object.assign({},t); });
   saveTeachers(teachers);
   buildFilterBar();
   renderGrid();
