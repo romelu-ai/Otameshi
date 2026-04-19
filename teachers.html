@@ -367,6 +367,18 @@ function saveEdit() {
     teachers[idx].catch   = cat;
     if (page) teachers[idx].page = page;
     if (photoData) teachers[idx].photo = photoData;
+
+    // ★ 各講師のプロフィールページ用ストレージにも写真を書き込む
+    if (photoData) {
+      var profileKey = 'minami_profile__' + (teachers[idx].page || page);
+      try {
+        var existing = localStorage.getItem(profileKey);
+        var profileData = existing ? JSON.parse(existing) : {};
+        profileData.photo = photoData;
+        localStorage.setItem(profileKey, JSON.stringify(profileData));
+      } catch(e) {}
+    }
+
     saveTeachers(teachers);
     buildFilterBar();
     renderGrid();
@@ -400,7 +412,20 @@ function addTeacher() {
   if (!/\.html$/.test(page)) page += '.html';
 
   function save(photoData) {
-    teachers.push({ name: name, subject: subject, catch: cat, page: page, photo: photoData || '' });
+    var newTeacher = { name: name, subject: subject, catch: cat, page: page, photo: photoData || '' };
+    teachers.push(newTeacher);
+
+    // ★ プロフィールページ用ストレージにも写真を書き込む
+    if (photoData) {
+      var profileKey = 'minami_profile__' + page;
+      try {
+        var existing = localStorage.getItem(profileKey);
+        var profileData = existing ? JSON.parse(existing) : {};
+        profileData.photo = photoData;
+        localStorage.setItem(profileKey, JSON.stringify(profileData));
+      } catch(e) {}
+    }
+
     saveTeachers(teachers);
     buildFilterBar();
     renderGrid();
