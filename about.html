@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>もっと知りたい | 南高校.com</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Hiragino Kaku Gothic ProN', 'Meiryo', sans-serif; background: #f0f0f0; color: #333; }
+  .site-header { background: #fff; border-bottom: 3px solid #00a99d; padding: 10px 16px; display: flex; align-items: center; justify-content: space-between; }
+  .site-title { font-size: 1.4rem; font-weight: 900; color: #00a99d; letter-spacing: -.5px; }
+  .site-title span { color: #f05a28; }
+  .header-btns { display: flex; }
+  .header-btn { padding: 10px 14px; font-size: .78rem; font-weight: 700; color: #fff; border: none; text-align: center; flex: 1; text-decoration: none; display: flex; align-items: center; justify-content: center; transition: opacity .15s; cursor: pointer; }
+  .header-btn:hover { opacity: .85; }
+  .btn-orange { background: #f05a28; } .btn-blue { background: #1a6ab8; } .btn-red { background: #e0001b; } .btn-teal { background: #00a99d; }
+  .container { max-width: 700px; margin: 0 auto; background: #fff; }
+  .page-hero { background: linear-gradient(135deg, #00a99d 0%, #007a72 100%); color: #fff; padding: 32px 20px; text-align: center; }
+  .page-hero h1 { font-size: 1.5rem; font-weight: 900; margin-bottom: 8px; }
+  .page-hero p { font-size: .9rem; opacity: .92; }
+  .back-link-wrap { padding: 12px 14px; }
+  .back-link { display: inline-block; padding: 6px 14px; background: #00a99d; color: #fff; border-radius: 20px; font-size: .8rem; font-weight: 700; text-decoration: none; }
+  .back-link:hover { opacity: .8; }
+  .section { padding: 18px 16px; border-bottom: 1px solid #eee; }
+  .section h2 { font-size: 1rem; font-weight: 700; color: #00a99d; border-left: 4px solid #00a99d; padding-left: 10px; margin-bottom: 12px; }
+  .section p { font-size: .88rem; line-height: 1.85; color: #444; }
+  .point-list { list-style: none; }
+  .point-list li { display: flex; gap: 10px; margin-bottom: 10px; font-size: .87rem; line-height: 1.6; }
+  .point-list li::before { content: '✅'; flex-shrink: 0; }
+  .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .stat-box { background: #f0faf9; border: 1.5px solid #a0dbd7; border-radius: 8px; padding: 14px 8px; text-align: center; }
+  .stat-num { font-size: 1.6rem; font-weight: 900; color: #00a99d; }
+  .stat-label { font-size: .72rem; color: #555; margin-top: 4px; }
+  .faq-item { margin-bottom: 12px; border: 1px solid #e0e0e0; border-radius: 6px; overflow: hidden; }
+  .faq-q { background: #f0faf9; padding: 10px 12px; font-size: .88rem; font-weight: 700; cursor: pointer; display: flex; justify-content: space-between; }
+  .faq-a { padding: 10px 12px; font-size: .85rem; line-height: 1.7; color: #444; display: none; border-top: 1px solid #e0e0e0; }
+  .faq-a.open { display: block; }
+  .cta-section { padding: 24px 16px; text-align: center; background: #f0faf9; }
+  .cta-section h2 { font-size: 1.05rem; font-weight: 700; margin-bottom: 16px; color: #333; }
+  .cta-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .cta-btn { display: block; padding: 13px; border-radius: 8px; color: #fff; font-size: .88rem; font-weight: 700; text-decoration: none; text-align: center; }
+  .cta-btn:hover { opacity: .85; }
+  .footer-arrow { text-align: right; padding: 8px 12px; border-top: 1px solid #e0e0e0; }
+  .arrow-btn { display: inline-block; background: #888; color: #fff; width: 32px; height: 32px; border-radius: 50%; font-size: 1rem; line-height: 32px; text-align: center; cursor: pointer; border: none; }
+</style>
+</head>
+<body>
+<div class="site-header">
+  <div class="site-title">南高校<span>.</span>com</div>
+  <div style="font-size:.7rem;color:#888">予備校・大学受験</div>
+</div>
+<div class="header-btns">
+  <a href="request.html"  class="header-btn btn-orange">資料請求▶</a>
+  <a href="consult.html"  class="header-btn btn-blue">個別相談▶</a>
+  <a href="trial.html"    class="header-btn btn-red">今すぐ体験▶</a>
+  <a href="about.html"    class="header-btn btn-teal">もっと知りたい▶</a>
+</div>
+<div class="container">
+  <div class="page-hero">
+    <h1>🏫 南高校.comとは</h1>
+    <p>受験を突破するための、本物の学びを。<br>講師陣・実績・指導理念をご紹介します。</p>
+  </div>
+  <div class="back-link-wrap"><a href="index.html" class="back-link">← 講師トップへ</a></div>
+
+  <!-- 理念 -->
+  <div class="section">
+    <h2>📖 指導理念</h2>
+    <p>南高校.comは「知識の習得」ではなく、「自ら考え行使できる力」を育てることを最大の使命としています。単なる受験テクニックではなく、大学進学後・社会に出てからも通用する本質的な思考力の育成を目指します。</p>
+  </div>
+
+  <!-- 特徴 -->
+  <div class="section">
+    <h2>⭐ 南高校.comの特徴</h2>
+    <ul class="point-list">
+      <li>全国トップクラスの専任講師が直接指導。映像授業ではなく、本物のライブ授業。</li>
+      <li>生徒一人ひとりの弱点を把握した、完全個別カリキュラム。</li>
+      <li>YouTubeなどデジタル教材も活用した、時代に合った学習スタイル。</li>
+      <li>自習室・質問対応は無制限。いつでも疑問をつぶせる環境。</li>
+      <li>保護者との連携を大切にした、三者一体の受験サポート。</li>
+    </ul>
+  </div>
+
+  <!-- 実績 -->
+  <div class="section">
+    <h2>📊 実績（2024年度）</h2>
+    <div class="stats-grid">
+      <div class="stat-box"><div class="stat-num">94<span style="font-size:1rem">%</span></div><div class="stat-label">志望校合格率</div></div>
+      <div class="stat-box"><div class="stat-num">320<span style="font-size:1rem">名</span></div><div class="stat-label">国公立大学合格</div></div>
+      <div class="stat-box"><div class="stat-num">15<span style="font-size:1rem">年</span></div><div class="stat-label">の指導実績</div></div>
+    </div>
+  </div>
+
+  <!-- 講師陣 -->
+  <div class="section">
+    <h2>👩‍🏫 講師陣</h2>
+    <p>各教科のスペシャリストが揃っています。<br><br></p>
+    <a href="teachers.html" style="display:inline-block;padding:9px 20px;background:#00a99d;color:#fff;border-radius:20px;font-size:.85rem;font-weight:700;text-decoration:none;">
+      講師陣一覧を見る →
+    </a>
+  </div>
+
+  <!-- よくある質問 -->
+  <div class="section">
+    <h2>❓ よくある質問</h2>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">入会金・体験料金はかかりますか？<span>＋</span></div>
+      <div class="faq-a">体験授業は完全無料です。入会後は月謝のみで、入会金は一切いただきません。</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">オンラインでも受講できますか？<span>＋</span></div>
+      <div class="faq-a">はい、全コースオンライン対応しています。Zoomを使ったライブ授業で、校舎と同じ質の指導を受けられます。</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">途中から教科を変えることはできますか？<span>＋</span></div>
+      <div class="faq-a">もちろんです。月単位でのプラン変更が可能です。担当スタッフにご相談ください。</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">高1・高2から通う意味はありますか？<span>＋</span></div>
+      <div class="faq-a">非常に大きなメリットがあります。早い段階から基礎を固めることで、高3時の演習量が圧倒的に増えます。</div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-section">
+    <h2>まず一歩、踏み出してみませんか？</h2>
+    <div class="cta-btns">
+      <a href="trial.html" class="cta-btn" style="background:#e0001b">🎯 無料体験を申し込む</a>
+      <a href="consult.html" class="cta-btn" style="background:#1a6ab8">💬 個別相談を予約する</a>
+      <a href="request.html" class="cta-btn" style="background:#f05a28">📄 資料を請求する</a>
+      <a href="teachers.html" class="cta-btn" style="background:#00a99d">👩‍🏫 講師陣を見る</a>
+    </div>
+  </div>
+
+  <div class="footer-arrow"><button class="arrow-btn" onclick="window.scrollTo({top:0,behavior:'smooth'})">▲</button></div>
+</div>
+<script>
+function toggleFaq(el) {
+  var ans = el.nextElementSibling;
+  var icon = el.querySelector('span');
+  ans.classList.toggle('open');
+  icon.textContent = ans.classList.contains('open') ? '－' : '＋';
+}
+</script>
+</body>
+</html>
