@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>講師陣一覧 | 南高校.com</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Hiragino Kaku Gothic ProN', 'Meiryo', sans-serif; background: #f0f0f0; color: #333; }
+
+  .site-header {
+    background: #fff;
+    border-bottom: 3px solid #00a99d;
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .site-title { font-size: 1.4rem; font-weight: 900; color: #00a99d; letter-spacing: -.5px; }
+  .site-title span { color: #f05a28; }
+
+  .header-btns { display: flex; gap: 0; overflow: hidden; }
+  .header-btn {
+    padding: 10px 14px; font-size: .78rem; font-weight: 700; color: #fff;
+    border: none; cursor: pointer; text-align: center; flex: 1;
+    text-decoration: none; display: flex; align-items: center; justify-content: center;
+    transition: opacity .15s;
+  }
+  .header-btn:hover { opacity: .85; }
+  .btn-orange { background: #f05a28; }
+  .btn-blue   { background: #1a6ab8; }
+  .btn-red    { background: #e0001b; }
+  .btn-teal   { background: #00a99d; }
+
+  .container { max-width: 700px; margin: 0 auto; background: #fff; }
+
+  .page-title-bar {
+    background: #00a99d; color: #fff;
+    padding: 12px 16px; font-size: 1.05rem; font-weight: 700;
+    margin-top: 10px;
+    display: flex; align-items: center; gap: 8px;
+  }
+
+  .back-link-wrap { padding: 10px 14px; }
+  .back-link {
+    display: inline-block; padding: 6px 14px;
+    background: #00a99d; color: #fff; border-radius: 20px;
+    font-size: .8rem; font-weight: 700; text-decoration: none;
+    transition: opacity .15s;
+  }
+  .back-link:hover { opacity: .8; }
+
+  /* ── 教科フィルター ── */
+  .filter-bar {
+    padding: 10px 12px; background: #f7f9fb;
+    border-top: 1px solid #e0e0e0; border-bottom: 1px solid #e0e0e0;
+    display: flex; gap: 6px; flex-wrap: wrap;
+  }
+  .filter-btn {
+    padding: 5px 12px; border-radius: 20px; border: 1.5px solid #00a99d;
+    background: #fff; color: #00a99d; font-size: .78rem; font-weight: 700;
+    cursor: pointer; transition: all .15s; font-family: inherit;
+  }
+  .filter-btn.active, .filter-btn:hover {
+    background: #00a99d; color: #fff;
+  }
+
+  /* ── 講師カードグリッド ── */
+  .teachers-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px;
+    padding: 14px 12px;
+  }
+
+  .teacher-card {
+    border: 2px solid #e0e0e0; border-radius: 8px; overflow: hidden;
+    background: #fff; text-decoration: none; color: #333;
+    transition: border-color .15s, box-shadow .15s;
+    display: block;
+  }
+  .teacher-card:hover { border-color: #00a99d; box-shadow: 0 3px 12px rgba(0,169,157,.15); }
+
+  .card-thumb {
+    width: 100%; height: 120px;
+    background: #ddd; display: flex; align-items: center; justify-content: center;
+    font-size: 2.5rem; color: #bbb; overflow: hidden;
+  }
+  .card-thumb img { width: 100%; height: 100%; object-fit: cover; }
+
+  .card-body { padding: 10px 10px 12px; }
+  .card-subject-badge {
+    display: inline-block; background: #00a99d; color: #fff;
+    font-size: .7rem; font-weight: 700; padding: 2px 8px;
+    border-radius: 10px; margin-bottom: 6px;
+  }
+  .card-name { font-size: .95rem; font-weight: 700; margin-bottom: 4px; }
+  .card-catch { font-size: .75rem; color: #666; line-height: 1.5; }
+
+  /* ── 追加フォーム（折りたたみ） ── */
+  .add-toggle-bar {
+    background: #f05a28; color: #fff; font-size: .88rem; font-weight: 700;
+    padding: 10px 14px; cursor: pointer; display: flex; justify-content: space-between;
+    align-items: center; user-select: none; margin-top: 10px;
+  }
+  .add-toggle-bar:hover { background: #d44a1a; }
+  .add-toggle-bar .arrow { font-size: .75rem; transition: transform .25s; }
+  .add-toggle-bar.open .arrow { transform: rotate(180deg); }
+
+  .add-panel {
+    background: #fff8f5; border: 2px solid #f05a28; border-top: none;
+    padding: 18px 14px; display: none;
+  }
+  .add-panel.open { display: block; }
+  .add-panel h3 { font-size: .9rem; color: #f05a28; font-weight: 700; margin-bottom: 14px; }
+
+  .field { margin-bottom: 12px; }
+  .field label { display: block; font-size: .78rem; font-weight: 700; color: #555; margin-bottom: 4px; }
+  .field input, .field textarea, .field select {
+    width: 100%; padding: 8px 10px; border: 1px solid #c0c0c0;
+    border-radius: 4px; font-size: .85rem; font-family: inherit; background: #fff;
+  }
+  .field input[type=file] { padding: 4px; }
+
+  .btn-row { display: flex; gap: 8px; margin-top: 10px; }
+  .add-btn {
+    flex: 1; padding: 11px; background: #f05a28; color: #fff;
+    border: none; border-radius: 6px; font-size: .9rem; font-weight: 700;
+    cursor: pointer; font-family: inherit;
+  }
+  .add-btn:hover { background: #d44a1a; }
+  .clear-btn {
+    padding: 11px 18px; background: #888; color: #fff;
+    border: none; border-radius: 6px; font-size: .9rem; font-weight: 700;
+    cursor: pointer; font-family: inherit;
+  }
+  .clear-btn:hover { background: #555; }
+
+  .empty-msg { text-align: center; color: #aaa; font-size: .85rem; padding: 30px; }
+
+  .footer-arrow { text-align: right; padding: 8px 12px; border-top: 1px solid #e0e0e0; }
+  .arrow-btn {
+    display: inline-block; background: #888; color: #fff; width: 32px; height: 32px;
+    border-radius: 50%; font-size: 1rem; line-height: 32px; text-align: center;
+    cursor: pointer; border: none;
+  }
+</style>
+</head>
+<body>
+
+<!-- ヘッダー -->
+<div class="site-header">
+  <div class="site-title">南高校<span>.</span>com</div>
+  <div style="font-size:.7rem;color:#888">予備校・大学受験</div>
+</div>
+<div class="header-btns">
+  <a href="request.html"  class="header-btn btn-orange">資料請求▶</a>
+  <a href="consult.html"  class="header-btn btn-blue">個別相談▶</a>
+  <a href="trial.html"    class="header-btn btn-red">今すぐ体験▶</a>
+  <a href="about.html"    class="header-btn btn-teal">もっと知りたい▶</a>
+</div>
+
+<div class="container">
+  <div class="page-title-bar">👩‍🏫 講師陣一覧</div>
+
+  <div class="back-link-wrap">
+    <a href="index.html" class="back-link">← 講師トップへ</a>
+  </div>
+
+  <!-- 教科フィルター -->
+  <div class="filter-bar" id="filter-bar">
+    <button class="filter-btn active" onclick="filterBy('all', this)">すべて</button>
+    <!-- JSで追加 -->
+  </div>
+
+  <!-- 講師グリッド -->
+  <div class="teachers-grid" id="teachers-grid"></div>
+
+  <div class="footer-arrow"><button class="arrow-btn" onclick="window.scrollTo({top:0,behavior:'smooth'})">▲</button></div>
+
+  <!-- 講師追加パネル -->
+  <div class="add-toggle-bar" id="add-toggle" onclick="toggleAdd()">
+    <span>➕ 講師を追加・編集する</span>
+    <span class="arrow">▼</span>
+  </div>
+  <div class="add-panel" id="add-panel">
+    <h3>講師情報を入力</h3>
+
+    <div class="field">
+      <label>先生名（例：山田 太郎 先生）</label>
+      <input type="text" id="add-name" placeholder="○○ ○○ 先生">
+    </div>
+    <div class="field">
+      <label>教科</label>
+      <input type="text" id="add-subject" placeholder="数学 / 英語 / 化学 …">
+    </div>
+    <div class="field">
+      <label>キャッチコピー</label>
+      <textarea id="add-catch" rows="2" placeholder="先生の一言紹介…"></textarea>
+    </div>
+    <div class="field">
+      <label>プロフィールページのURL（例：teacher-math.html）</label>
+      <input type="text" id="add-page" placeholder="teacher-xxx.html">
+    </div>
+    <div class="field">
+      <label>顔写真</label>
+      <input type="file" id="add-photo" accept="image/*">
+    </div>
+
+    <div class="btn-row">
+      <button class="add-btn" onclick="addTeacher()">追加する</button>
+      <button class="clear-btn" onclick="clearAll()">全リセット</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ── データ管理 ── */
+var STORAGE_KEY = 'minami_teachers';
+
+var defaultTeachers = [
+  { name:'菊池 洋美 先生', subject:'化学', catch:'授業ではなく、化学学習の自主性を最重視し、「理系の倫理観」を養成する！', page:'index.html', photo:'' },
+  { name:'田中 誠 先生',   subject:'数学', catch:'本質から迫る数学で、入試を突破する。',   page:'teacher-math.html', photo:'' },
+  { name:'鈴木 花子 先生', subject:'英語', catch:'英語を「読む力」から鍛え直す。',           page:'teacher-english.html', photo:'' },
+  { name:'山本 健太 先生', subject:'物理', catch:'物理の面白さを体感させる授業。',           page:'teacher-physics.html', photo:'' },
+  { name:'佐藤 美咲 先生', subject:'国語', catch:'文章読解の核心を、確実につかむ。',         page:'teacher-japanese.html', photo:'' },
+  { name:'伊藤 隆 先生',   subject:'生物', catch:'生命の仕組みを丁寧に解説する。',           page:'teacher-biology.html', photo:'' },
+];
+
+function loadTeachers() {
+  try {
+    var stored = localStorage.getItem(STORAGE_KEY);
+    return stored ? JSON.parse(stored) : defaultTeachers;
+  } catch(e) {
+    return defaultTeachers;
+  }
+}
+function saveTeachers(list) {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(list)); } catch(e) {}
+}
+
+var teachers = loadTeachers();
+var currentFilter = 'all';
+
+/* ── フィルター ── */
+function buildFilterBar() {
+  var bar = document.getElementById('filter-bar');
+  // 既存ボタン（「すべて」以外）削除
+  while (bar.children.length > 1) bar.removeChild(bar.lastChild);
+  var subjects = [];
+  teachers.forEach(function(t) {
+    if (subjects.indexOf(t.subject) === -1) subjects.push(t.subject);
+  });
+  subjects.forEach(function(s) {
+    var btn = document.createElement('button');
+    btn.className = 'filter-btn';
+    btn.textContent = s;
+    btn.onclick = function() { filterBy(s, this); };
+    bar.appendChild(btn);
+  });
+}
+
+function filterBy(key, btn) {
+  currentFilter = key;
+  document.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('active'); });
+  btn.classList.add('active');
+  renderGrid();
+}
+
+/* ── グリッド描画 ── */
+function renderGrid() {
+  var grid = document.getElementById('teachers-grid');
+  grid.innerHTML = '';
+  var list = currentFilter === 'all'
+    ? teachers
+    : teachers.filter(function(t) { return t.subject === currentFilter; });
+
+  if (list.length === 0) {
+    grid.innerHTML = '<div class="empty-msg">講師が登録されていません。</div>';
+    return;
+  }
+  list.forEach(function(t) {
+    var a = document.createElement('a');
+    a.className = 'teacher-card';
+    a.href = t.page || '#';
+
+    var thumbHtml = t.photo
+      ? '<img src="' + t.photo + '" alt="' + t.name + '">'
+      : '👤';
+    a.innerHTML = '<div class="card-thumb">' + thumbHtml + '</div>'
+      + '<div class="card-body">'
+      + '<span class="card-subject-badge">' + (t.subject||'') + '</span>'
+      + '<div class="card-name">' + (t.name||'') + '</div>'
+      + '<div class="card-catch">' + (t.catch||'') + '</div>'
+      + '</div>';
+    grid.appendChild(a);
+  });
+}
+
+/* ── 追加 ── */
+function toggleAdd() {
+  var bar   = document.getElementById('add-toggle');
+  var panel = document.getElementById('add-panel');
+  bar.classList.toggle('open');
+  panel.classList.toggle('open');
+}
+
+function addTeacher() {
+  var name    = document.getElementById('add-name').value.trim();
+  var subject = document.getElementById('add-subject').value.trim();
+  var cat     = document.getElementById('add-catch').value.trim();
+  var page    = document.getElementById('add-page').value.trim();
+  var photoFile = document.getElementById('add-photo').files[0];
+
+  if (!name || !subject) { alert('先生名と教科は必須です。'); return; }
+
+  function save(photoData) {
+    teachers.push({ name: name, subject: subject, catch: cat, page: page || '#', photo: photoData || '' });
+    saveTeachers(teachers);
+    buildFilterBar();
+    renderGrid();
+    // フォームリセット
+    ['add-name','add-subject','add-catch','add-page'].forEach(function(id) {
+      document.getElementById(id).value = '';
+    });
+    document.getElementById('add-photo').value = '';
+    alert('追加しました！');
+  }
+
+  if (photoFile) {
+    var r = new FileReader();
+    r.onload = function(e) { save(e.target.result); };
+    r.readAsDataURL(photoFile);
+  } else {
+    save('');
+  }
+}
+
+function clearAll() {
+  if (!confirm('全ての講師データをリセットしますか？\n（デフォルトに戻ります）')) return;
+  teachers = defaultTeachers.slice();
+  saveTeachers(teachers);
+  buildFilterBar();
+  renderGrid();
+}
+
+/* ── 初期化 ── */
+buildFilterBar();
+renderGrid();
+</script>
+</body>
+</html>
