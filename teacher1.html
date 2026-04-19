@@ -589,30 +589,6 @@ function exportData() {
   URL.revokeObjectURL(url);
 }
 
-/* ── インポート：JSONファイルを読み込んでlocalStorageに一括復元 ── */
-function importData(input) {
-  var file = input.files[0];
-  if (!file) return;
-  var reader = new FileReader();
-  reader.onload = function(e) {
-    try {
-      var data = JSON.parse(e.target.result);
-      var count = 0;
-      Object.keys(data).forEach(function(key) {
-        if (key.indexOf('minami_') === 0) {
-          localStorage.setItem(key, JSON.stringify(data[key]));
-          count++;
-        }
-      });
-      alert('✅ インポート完了！\n' + count + '件のデータを復元しました。\nページを再読み込みします。');
-      location.reload();
-    } catch(err) {
-      alert('❌ 読み込みに失敗しました。\n正しいJSONファイルを選択してください。');
-    }
-  };
-  reader.readAsText(file);
-  input.value = '';
-}
 
 /* ── 初期化 ── */
 (function() {
