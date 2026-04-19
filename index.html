@@ -60,21 +60,29 @@
   position: relative; width: 100%; padding-top: 56.25%;
   background: #111; overflow: hidden;
 }
-.video-wrap img {
-  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
-}
-.video-wrap video {
-  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
-}
+/* サムネイル・video・iframeはすべて z-index:1 */
+.video-wrap img,
+.video-wrap video,
 .video-wrap iframe {
-  position: absolute; inset: 0; width: 100%; height: 100%; border: none;
+  position: absolute; inset: 0; width: 100%; height: 100%; border: none; z-index: 1;
 }
+.video-wrap img    { object-fit: cover; }
+.video-wrap video  { object-fit: cover; }
+/* オーバーレイ（赤ボタン・タイトル）は z-index:2 → 常に手前 */
 .video-overlay {
-  position: absolute; inset: 0; display: flex;
+  position: absolute; inset: 0; z-index: 2; display: flex;
   flex-direction: column; align-items: center; justify-content: center; color: #fff;
   pointer-events: none;
 }
+/* iframeが入ったらオーバーレイを非表示（iframeに自前の再生UIがある） */
 .video-wrap.has-embed .video-overlay { display: none; }
+/* ラベルバーも z-index:2 */
+.video-label {
+  position: absolute; bottom: 0; left: 0; right: 0; z-index: 2;
+  background: rgba(0,0,0,.6); color: #fff; font-size: .75rem;
+  padding: 5px 10px; display: flex; justify-content: space-between; align-items: center;
+  pointer-events: none;
+}
 .video-title {
   background: rgba(0,0,0,.55); padding: 6px 12px; font-size: .85rem; font-weight: 700;
   margin-bottom: 14px; text-align: center; width: 100%; pointer-events: auto;
@@ -90,12 +98,6 @@
   border-width: 14px 0 14px 26px;
   border-color: transparent transparent transparent #fff;
   margin-left: 4px;
-}
-.video-label {
-  position: absolute; bottom: 0; left: 0; right: 0;
-  background: rgba(0,0,0,.6); color: #fff; font-size: .75rem;
-  padding: 5px 10px; display: flex; justify-content: space-between; align-items: center;
-  pointer-events: none;
 }
 .teacher-name-large { font-size: 1.3rem; font-weight: 900; }
 .yt-badge { display: flex; align-items: center; gap: 4px; font-size: .72rem; opacity: .9; }
@@ -360,6 +362,7 @@ function renderVideo(d) {
   var thumb = document.getElementById('disp-video-thumb');
 
   if (d.videoType === 'file' && d.videoData) {
+    // MP4などのファイル再生
     var vid = document.createElement('video');
     vid.id = '__video__'; vid.controls = true; vid.src = d.videoData;
     wrap.insertBefore(vid, wrap.firstChild);
@@ -370,20 +373,27 @@ function renderVideo(d) {
   } else if (d.videoType === 'url' && d.videoUrl) {
     var res = resolveVideo(d.videoUrl);
     if (res.mode === 'embed') {
+      // YouTube/Vimeo/Google Drive → iframeをwrapの先頭に挿入（z-index:1でオーバーレイの下）
+      // has-embedを付けてオーバーレイ（赤ボタン）を非表示にする
+      // iframeプレーヤー自身に再生UIがあるため問題なし
       var ifr = document.createElement('iframe');
       ifr.id = '__iframe__'; ifr.src = res.src;
       ifr.allowFullscreen = true;
       ifr.setAttribute('allow', 'autoplay; fullscreen; picture-in-picture');
+      // iframeをDOMの先頭に置く（CSS z-index:1 < overlay z-index:2）
+      // has-embedでoverlayを消すのでiframeが全面に見える
       wrap.insertBefore(ifr, wrap.firstChild);
       wrap.classList.add('has-embed');
       document.getElementById('badge-text').textContent = res.badge;
+      // サムネイルは非表示（iframeが覆うため）
+      thumb.style.display = 'none';
     } else {
+      // 外部リンク → 赤いボタンにURLをセット（オーバーレイ表示のまま）
       document.getElementById('play-btn-link').href = res.src;
       document.getElementById('badge-text').textContent = res.badge;
+      if (d.thumb) { thumb.src = d.thumb; thumb.style.display = 'block'; }
+      else { thumb.style.display = 'none'; }
     }
-    // サムネイル
-    if (d.thumb) { thumb.src = d.thumb; thumb.style.display = 'block'; }
-    else { thumb.style.display = 'none'; }
 
   } else {
     // 動画なし or 未設定
