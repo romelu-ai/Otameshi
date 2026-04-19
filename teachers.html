@@ -219,12 +219,12 @@
 var STORAGE_KEY = 'minami_teachers';
 
 var defaultTeachers = [
-  { name:'菊池 洋美 先生', subject:'化学', catch:'授業ではなく、化学学習の自主性を最重視し、「理系の倫理観」を養成する！', page:'index.html', photo:'' },
-  { name:'田中 誠 先生',   subject:'数学', catch:'本質から迫る数学で、入試を突破する。',   page:'teacher-math.html', photo:'' },
-  { name:'鈴木 花子 先生', subject:'英語', catch:'英語を「読む力」から鍛え直す。',           page:'teacher-english.html', photo:'' },
-  { name:'山本 健太 先生', subject:'物理', catch:'物理の面白さを体感させる授業。',           page:'teacher-physics.html', photo:'' },
+  { name:'菊池 洋美 先生', subject:'化学', catch:'授業ではなく、化学学習の自主性を最重視し、「理系の倫理観」を養成する！', page:'index.html',            photo:'' },
+  { name:'田中 誠 先生',   subject:'数学', catch:'本質から迫る数学で、入試を突破する。',   page:'teacher-math.html',     photo:'' },
+  { name:'鈴木 花子 先生', subject:'英語', catch:'英語を「読む力」から鍛え直す。',           page:'teacher-english.html',  photo:'' },
+  { name:'山本 健太 先生', subject:'物理', catch:'物理の面白さを体感させる授業。',           page:'teacher-physics.html',  photo:'' },
   { name:'佐藤 美咲 先生', subject:'国語', catch:'文章読解の核心を、確実につかむ。',         page:'teacher-japanese.html', photo:'' },
-  { name:'伊藤 隆 先生',   subject:'生物', catch:'生命の仕組みを丁寧に解説する。',           page:'teacher-biology.html', photo:'' },
+  { name:'伊藤 隆 先生',   subject:'生物', catch:'生命の仕組みを丁寧に解説する。',           page:'teacher-biology.html',  photo:'' },
 ];
 
 function loadTeachers() {
@@ -280,13 +280,21 @@ function renderGrid() {
     return;
   }
   list.forEach(function(t) {
+    // 各講師ページのprofileから写真を優先取得
+    var photo = '';
+    try {
+      var ps = localStorage.getItem('minami_profile__' + (t.page || ''));
+      if (ps) { var pd = JSON.parse(ps); photo = pd.photo || ''; }
+    } catch(e) {}
+    if (!photo) photo = t.photo || '';
+
     var a = document.createElement('a');
     a.className = 'teacher-card';
     a.href = t.page || '#';
 
-    var thumbHtml = t.photo
-      ? '<img src="' + t.photo + '" alt="' + t.name + '">'
-      : '👤';
+    var thumbHtml = photo
+      ? '<img src="' + photo + '" alt="' + t.name + '">'
+      : '<span style="font-size:2.8rem">👤</span>';
     a.innerHTML = '<div class="card-thumb">' + thumbHtml + '</div>'
       + '<div class="card-body">'
       + '<span class="card-subject-badge">' + (t.subject||'') + '</span>'
@@ -314,17 +322,24 @@ function addTeacher() {
 
   if (!name || !subject) { alert('先生名と教科は必須です。'); return; }
 
+  /* ページURLが空なら自動生成（名前をローマ字変換できないのでインデックスで代替） */
+  if (!page) {
+    var idx = teachers.length + 1;
+    page = 'teacher-' + idx + '.html';
+  }
+  /* .html が付いていなければ補完 */
+  if (!/\.html$/.test(page)) page += '.html';
+
   function save(photoData) {
-    teachers.push({ name: name, subject: subject, catch: cat, page: page || '#', photo: photoData || '' });
+    teachers.push({ name: name, subject: subject, catch: cat, page: page, photo: photoData || '' });
     saveTeachers(teachers);
     buildFilterBar();
     renderGrid();
-    // フォームリセット
     ['add-name','add-subject','add-catch','add-page'].forEach(function(id) {
       document.getElementById(id).value = '';
     });
     document.getElementById('add-photo').value = '';
-    alert('追加しました！');
+    alert('追加しました！\nプロフィールページ: ' + page + '\n\nindex.htmlをコピーして同名で保存すれば、そのページでも編集内容が保持されます。');
   }
 
   if (photoFile) {
