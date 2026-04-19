@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>今すぐ体験 | 南高校.com</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Hiragino Kaku Gothic ProN', 'Meiryo', sans-serif; background: #f0f0f0; color: #333; }
+  .site-header { background: #fff; border-bottom: 3px solid #00a99d; padding: 10px 16px; display: flex; align-items: center; justify-content: space-between; }
+  .site-title { font-size: 1.4rem; font-weight: 900; color: #00a99d; letter-spacing: -.5px; }
+  .site-title span { color: #f05a28; }
+  .header-btns { display: flex; }
+  .header-btn { padding: 10px 14px; font-size: .78rem; font-weight: 700; color: #fff; border: none; text-align: center; flex: 1; text-decoration: none; display: flex; align-items: center; justify-content: center; transition: opacity .15s; cursor: pointer; }
+  .header-btn:hover { opacity: .85; }
+  .btn-orange { background: #f05a28; } .btn-blue { background: #1a6ab8; } .btn-red { background: #e0001b; } .btn-teal { background: #00a99d; }
+  .container { max-width: 700px; margin: 0 auto; background: #fff; }
+  .page-hero { background: linear-gradient(135deg, #e0001b 0%, #a80016 100%); color: #fff; padding: 32px 20px; text-align: center; }
+  .page-hero h1 { font-size: 1.5rem; font-weight: 900; margin-bottom: 8px; }
+  .page-hero p { font-size: .9rem; opacity: .92; }
+  .back-link-wrap { padding: 12px 14px; }
+  .back-link { display: inline-block; padding: 6px 14px; background: #00a99d; color: #fff; border-radius: 20px; font-size: .8rem; font-weight: 700; text-decoration: none; }
+  .trial-banner { background: #fff0f0; border: 2px solid #e0001b; margin: 0 16px 16px; border-radius: 8px; padding: 14px 16px; text-align: center; }
+  .trial-banner .big { font-size: 1.4rem; font-weight: 900; color: #e0001b; }
+  .trial-banner .sub { font-size: .82rem; color: #555; margin-top: 4px; }
+  .steps { padding: 0 16px 16px; }
+  .steps h2 { font-size: 1rem; font-weight: 700; color: #e0001b; border-left: 4px solid #e0001b; padding-left: 10px; margin-bottom: 14px; }
+  .step-item { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 12px; }
+  .step-num { width: 28px; height: 28px; background: #e0001b; color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: .8rem; font-weight: 900; flex-shrink: 0; }
+  .step-text { font-size: .85rem; line-height: 1.6; padding-top: 3px; }
+  .step-text strong { color: #e0001b; }
+  .teachers-pick { padding: 0 16px 16px; }
+  .teachers-pick h2 { font-size: 1rem; font-weight: 700; color: #e0001b; border-left: 4px solid #e0001b; padding-left: 10px; margin-bottom: 12px; }
+  .subject-btns { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+  .subject-btn { padding: 7px 14px; border: 1.5px solid #e0001b; border-radius: 20px; background: #fff; color: #e0001b; font-size: .8rem; font-weight: 700; cursor: pointer; font-family: inherit; }
+  .subject-btn.selected { background: #e0001b; color: #fff; }
+  .form-section { padding: 0 16px 20px; }
+  .form-section h2 { font-size: 1rem; font-weight: 700; color: #e0001b; border-left: 4px solid #e0001b; padding-left: 10px; margin-bottom: 14px; }
+  .field { margin-bottom: 14px; }
+  .field label { display: block; font-size: .8rem; font-weight: 700; color: #555; margin-bottom: 4px; }
+  .field input, .field select, .field textarea { width: 100%; padding: 9px 11px; border: 1.5px solid #ccc; border-radius: 5px; font-size: .88rem; font-family: inherit; background: #fff; }
+  .field input:focus, .field select:focus { outline: none; border-color: #e0001b; }
+  .required { color: #e0001b; font-size: .75rem; margin-left: 4px; }
+  .submit-btn { width: 100%; padding: 14px; background: #e0001b; color: #fff; border: none; border-radius: 8px; font-size: 1rem; font-weight: 900; cursor: pointer; font-family: inherit; margin-top: 8px; letter-spacing: 1px; }
+  .submit-btn:hover { background: #a80016; }
+  .footer-arrow { text-align: right; padding: 8px 12px; border-top: 1px solid #e0e0e0; }
+  .arrow-btn { display: inline-block; background: #888; color: #fff; width: 32px; height: 32px; border-radius: 50%; font-size: 1rem; line-height: 32px; text-align: center; cursor: pointer; border: none; }
+</style>
+</head>
+<body>
+<div class="site-header">
+  <div class="site-title">南高校<span>.</span>com</div>
+  <div style="font-size:.7rem;color:#888">予備校・大学受験</div>
+</div>
+<div class="header-btns">
+  <a href="request.html"  class="header-btn btn-orange">資料請求▶</a>
+  <a href="consult.html"  class="header-btn btn-blue">個別相談▶</a>
+  <a href="trial.html"    class="header-btn btn-red">今すぐ体験▶</a>
+  <a href="about.html"    class="header-btn btn-teal">もっと知りたい▶</a>
+</div>
+<div class="container">
+  <div class="page-hero">
+    <h1>🎯 今すぐ体験</h1>
+    <p>実際の授業を無料で体験。<br>合格への第一歩はここから。</p>
+  </div>
+  <div class="back-link-wrap"><a href="index.html" class="back-link">← 講師トップへ</a></div>
+
+  <div class="trial-banner">
+    <div class="big">🎁 無料体験授業 実施中！</div>
+    <div class="sub">入会前でも、どんな科目でも体験OK。まずは気軽に試してみてください。</div>
+  </div>
+
+  <div class="steps">
+    <h2>体験の流れ</h2>
+    <div class="step-item"><div class="step-num">1</div><div class="step-text"><strong>フォームに入力</strong>：希望教科・日時をご記入ください。</div></div>
+    <div class="step-item"><div class="step-num">2</div><div class="step-text"><strong>担当者から連絡</strong>：1〜2営業日以内にご連絡いたします。</div></div>
+    <div class="step-item"><div class="step-num">3</div><div class="step-text"><strong>体験授業（無料）</strong>：実際の授業を60〜90分体験。</div></div>
+    <div class="step-item"><div class="step-num">4</div><div class="step-text"><strong>ゆっくり検討</strong>：その場での入会勧誘は一切ありません。</div></div>
+  </div>
+
+  <div class="teachers-pick">
+    <h2>体験したい教科を選ぶ</h2>
+    <div class="subject-btns" id="subject-btns">
+      <button class="subject-btn" onclick="selectSubject(this)">数学</button>
+      <button class="subject-btn" onclick="selectSubject(this)">英語</button>
+      <button class="subject-btn" onclick="selectSubject(this)">化学</button>
+      <button class="subject-btn" onclick="selectSubject(this)">物理</button>
+      <button class="subject-btn" onclick="selectSubject(this)">国語</button>
+      <button class="subject-btn" onclick="selectSubject(this)">生物</button>
+      <button class="subject-btn" onclick="selectSubject(this)">地理</button>
+      <button class="subject-btn" onclick="selectSubject(this)">その他</button>
+    </div>
+  </div>
+
+  <div class="form-section">
+    <h2>体験申し込みフォーム</h2>
+    <div class="field">
+      <label>お名前 <span class="required">必須</span></label>
+      <input type="text" placeholder="山田 太郎">
+    </div>
+    <div class="field">
+      <label>学年 <span class="required">必須</span></label>
+      <select>
+        <option value="">選択してください</option>
+        <option>高校1年生</option><option>高校2年生</option>
+        <option>高校3年生</option><option>既卒（浪人生）</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>メールアドレス <span class="required">必須</span></label>
+      <input type="email" placeholder="example@email.com">
+    </div>
+    <div class="field">
+      <label>電話番号</label>
+      <input type="tel" placeholder="090-0000-0000">
+    </div>
+    <div class="field">
+      <label>希望日（第1希望）</label>
+      <input type="date">
+    </div>
+    <div class="field">
+      <label>希望日（第2希望）</label>
+      <input type="date">
+    </div>
+    <div class="field">
+      <label>その他ご要望</label>
+      <textarea placeholder="特定の講師を希望する場合なども、こちらにご記入ください。"></textarea>
+    </div>
+    <button class="submit-btn" onclick="alert('体験のお申し込みありがとうございます！\n担当者よりご連絡いたします。')">体験を申し込む</button>
+  </div>
+  <div class="footer-arrow"><button class="arrow-btn" onclick="window.scrollTo({top:0,behavior:'smooth'})">▲</button></div>
+</div>
+<script>
+function selectSubject(btn) {
+  btn.classList.toggle('selected');
+}
+</script>
+</body>
+</html>
