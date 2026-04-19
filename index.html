@@ -439,6 +439,10 @@
 </div>
 
 <script>
+/* ページファイル名をキーにすることで、各講師ページが独立して保存される */
+var _page = location.pathname.split('/').pop() || 'index.html';
+var STORAGE_KEY = 'minami_profile__' + _page;
+
 /* ── 編集パネル開閉 ── */
 function toggleEdit() {
   var bar   = document.getElementById('edit-toggle');
@@ -447,7 +451,47 @@ function toggleEdit() {
   panel.classList.toggle('open');
 }
 
-/* ── 内容反映 ── */
+/* ── 表示に反映（データオブジェクトから） ── */
+function renderProfile(d) {
+  document.getElementById('disp-name').textContent = d.name;
+  document.getElementById('disp-name-large').textContent = d.name.replace(' 先生','');
+  document.getElementById('disp-subject').textContent = '[ ' + d.subject + ' ]';
+  document.getElementById('disp-catchcopy').innerHTML = d.catchcopy.replace(/\n/g,'<br>');
+  document.getElementById('disp-video-title').textContent = d.vtitle;
+  document.getElementById('disp-bio').textContent = d.bio;
+  if (d.videoUrl) document.getElementById('play-btn-link').href = d.videoUrl;
+  if (d.photo) {
+    var img = document.getElementById('disp-photo');
+    img.src = d.photo; img.style.display = 'block';
+    document.getElementById('photo-placeholder').style.display = 'none';
+  }
+  if (d.thumb) {
+    var th = document.getElementById('disp-video-thumb');
+    th.src = d.thumb; th.style.display = 'block';
+  }
+  /* フォームにも反映 */
+  document.getElementById('in-name').value      = d.name;
+  document.getElementById('in-subject').value   = d.subject;
+  document.getElementById('in-catchcopy').value = d.catchcopy;
+  document.getElementById('in-vtitle').value    = d.vtitle;
+  document.getElementById('in-video-url').value = d.videoUrl || '';
+  document.getElementById('in-bio').value       = d.bio;
+}
+
+/* ── 保存 ── */
+function saveProfile(d) {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(d)); } catch(e) {}
+}
+
+/* ── 読み込み ── */
+function loadProfile() {
+  try {
+    var s = localStorage.getItem(STORAGE_KEY);
+    return s ? JSON.parse(s) : null;
+  } catch(e) { return null; }
+}
+
+/* ── 反映ボタン ── */
 function applyChanges() {
   var name     = document.getElementById('in-name').value.trim() || '先生名';
   var subject  = document.getElementById('in-subject').value.trim() || '教科';
@@ -458,50 +502,57 @@ function applyChanges() {
   var photoFile = document.getElementById('in-photo').files[0];
   var thumbFile = document.getElementById('in-thumb').files[0];
 
-  document.getElementById('disp-name').textContent = name;
-  document.getElementById('disp-name-large').textContent = name.replace(' 先生','');
-  document.getElementById('disp-subject').textContent = '[ ' + subject + ' ]';
-  document.getElementById('disp-catchcopy').innerHTML = cc.replace(/\n/g,'<br>');
-  document.getElementById('disp-video-title').textContent = vtitle;
-  document.getElementById('disp-bio').textContent = bio;
+  var d = loadProfile() || {};
+  d.name = name; d.subject = subject; d.catchcopy = cc;
+  d.vtitle = vtitle; d.videoUrl = videoUrl; d.bio = bio;
 
-  if (videoUrl) {
-    document.getElementById('play-btn-link').href = videoUrl;
+  function finish() {
+    renderProfile(d);
+    saveProfile(d);
   }
 
   if (photoFile) {
-    var reader = new FileReader();
-    reader.onload = function(e) {
-      var img = document.getElementById('disp-photo');
-      img.src = e.target.result;
-      img.style.display = 'block';
-      document.getElementById('photo-placeholder').style.display = 'none';
+    var r1 = new FileReader();
+    r1.onload = function(e) {
+      d.photo = e.target.result;
+      if (thumbFile) {
+        var r2 = new FileReader();
+        r2.onload = function(e2) { d.thumb = e2.target.result; finish(); };
+        r2.readAsDataURL(thumbFile);
+      } else { finish(); }
     };
-    reader.readAsDataURL(photoFile);
-  }
-
-  if (thumbFile) {
-    var reader2 = new FileReader();
-    reader2.onload = function(e) {
-      var th = document.getElementById('disp-video-thumb');
-      th.src = e.target.result;
-      th.style.display = 'block';
-    };
-    reader2.readAsDataURL(thumbFile);
+    r1.readAsDataURL(photoFile);
+  } else if (thumbFile) {
+    var r2 = new FileReader();
+    r2.onload = function(e) { d.thumb = e.target.result; finish(); };
+    r2.readAsDataURL(thumbFile);
+  } else {
+    finish();
   }
 }
 
-/* ── その他講師陣（teachers.js から読み込む想定 / ここではインライン定義） ── */
-var otherTeachers = [
-  { name: '田中 誠 先生', subject: '数学', page: 'teacher-math.html', photo: '' },
-  { name: '鈴木 花子 先生', subject: '英語', page: 'teacher-english.html', photo: '' },
-  { name: '山本 健太 先生', subject: '物理', page: 'teacher-physics.html', photo: '' },
-  { name: '佐藤 美咲 先生', subject: '国語', page: 'teacher-japanese.html', photo: '' },
-  { name: '伊藤 隆 先生',   subject: '生物', page: 'teacher-biology.html', photo: '' },
-  { name: '渡辺 由美 先生', subject: '地理', page: 'teacher-geography.html', photo: '' },
-];
+/* ── ページ読み込み時に復元 ── */
+(function init() {
+  var d = loadProfile();
+  if (d) {
+    renderProfile(d);
+  }
+  /* その他講師陣はteachers.htmlのlocalStorageと共有 */
+  var TEACHERS_KEY = 'minami_teachers';
+  var defaultTeachers = [
+    { name: '田中 誠 先生',   subject: '数学', page: 'teacher-math.html',      photo: '' },
+    { name: '鈴木 花子 先生', subject: '英語', page: 'teacher-english.html',   photo: '' },
+    { name: '山本 健太 先生', subject: '物理', page: 'teacher-physics.html',   photo: '' },
+    { name: '佐藤 美咲 先生', subject: '国語', page: 'teacher-japanese.html',  photo: '' },
+    { name: '伊藤 隆 先生',   subject: '生物', page: 'teacher-biology.html',   photo: '' },
+    { name: '渡辺 由美 先生', subject: '地理', page: 'teacher-geography.html', photo: '' },
+  ];
+  var otherTeachers;
+  try {
+    var s = localStorage.getItem(TEACHERS_KEY);
+    otherTeachers = s ? JSON.parse(s) : defaultTeachers;
+  } catch(e) { otherTeachers = defaultTeachers; }
 
-(function buildOtherTeachers() {
   var container = document.getElementById('other-teachers-list');
   otherTeachers.forEach(function(t) {
     var a = document.createElement('a');
