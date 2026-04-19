@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
@@ -11,38 +10,44 @@
 
 /* ── ヘッダー ── */
 .site-header {
-background: #fff;
-border-bottom: 3px solid #00a99d;
-padding: 10px 16px;
-display: flex;
-align-items: center;
-justify-content: space-between;
+  background: #fff;
+  border-bottom: 3px solid #00a99d;
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 .site-title {
-font-size: 1.4rem;
-font-weight: 900;
-color: #00a99d;
-letter-spacing: -.5px;
+  font-size: 1.4rem;
+  font-weight: 900;
+  color: #00a99d;
+  letter-spacing: -.5px;
 }
 .site-title span { color: #f05a28; }
 
 /* ── ボタン行 ── */
 .header-btns {
-display: flex;
-gap: 0;
-margin: 0;
-overflow: hidden;
+  display: flex;
+  gap: 0;
+  margin: 0;
+  overflow: hidden;
 }
 .header-btn {
-padding: 10px 14px;
-font-size: .78rem;
-font-weight: 700;
-color: #fff;
-border: none;
-cursor: pointer;
-text-align: center;
-flex: 1;
+  padding: 10px 14px;
+  font-size: .78rem;
+  font-weight: 700;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  text-align: center;
+  flex: 1;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity .15s;
 }
+.header-btn:hover { opacity: .85; }
 .btn-orange { background: #f05a28; }
 .btn-blue   { background: #1a6ab8; }
 .btn-red    { background: #e0001b; }
@@ -53,270 +58,297 @@ flex: 1;
 
 /* ── 先生名バー ── */
 .teacher-bar {
-background: #00a99d;
-color: #fff;
-display: flex;
-justify-content: space-between;
-align-items: center;
-padding: 8px 12px;
-font-size: .95rem;
-font-weight: 700;
-margin-top: 10px;
+  background: #00a99d;
+  color: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  font-size: .95rem;
+  font-weight: 700;
+  margin-top: 10px;
 }
 .teacher-bar .subject { font-size: .85rem; }
 
 /* ── 先生情報カード ── */
 .teacher-card {
-border: 2px solid #00a99d;
-margin: 0 0 12px 0;
-background: #fff;
+  border: 2px solid #00a99d;
+  margin: 0 0 12px 0;
+  background: #fff;
 }
 .teacher-info {
-display: flex;
-align-items: center;
-gap: 12px;
-padding: 10px 12px;
-border-bottom: 1px solid #e0e0e0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-bottom: 1px solid #e0e0e0;
 }
 .teacher-photo {
-width: 64px;
-height: 64px;
-object-fit: cover;
-border: 1px solid #ccc;
-flex-shrink: 0;
-background: #ddd;
-display: flex;
-align-items: center;
-justify-content: center;
-color: #999;
-font-size: .7rem;
-text-align: center;
+  width: 64px;
+  height: 64px;
+  object-fit: cover;
+  border: 1px solid #ccc;
+  flex-shrink: 0;
+  background: #ddd;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #999;
+  font-size: .7rem;
+  text-align: center;
+  overflow: hidden;
 }
 .teacher-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .teacher-catchcopy {
-font-size: .82rem;
-line-height: 1.6;
-color: #333;
+  font-size: .82rem;
+  line-height: 1.6;
+  color: #333;
 }
 
 /* ── 動画エリア ── */
 .video-wrap {
-position: relative;
-width: 100%;
-padding-top: 56.25%;
-background: #111;
-overflow: hidden;
+  position: relative;
+  width: 100%;
+  padding-top: 56.25%;
+  background: #111;
+  overflow: hidden;
 }
 .video-wrap img {
-position: absolute;
-inset: 0;
-width: 100%;
-height: 100%;
-object-fit: cover;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 .video-overlay {
-position: absolute;
-inset: 0;
-display: flex;
-flex-direction: column;
-align-items: center;
-justify-content: center;
-color: #fff;
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
 }
 .video-title {
-background: rgba(0,0,0,.55);
-padding: 6px 12px;
-font-size: .85rem;
-font-weight: 700;
-margin-bottom: 14px;
-text-align: center;
-width: 100%;
+  background: rgba(0,0,0,.55);
+  padding: 6px 12px;
+  font-size: .85rem;
+  font-weight: 700;
+  margin-bottom: 14px;
+  text-align: center;
+  width: 100%;
 }
 .play-btn {
-width: 64px;
-height: 64px;
-background: #f00;
-border-radius: 14px;
-display: flex;
-align-items: center;
-justify-content: center;
-cursor: pointer;
+  width: 64px;
+  height: 64px;
+  background: #f00;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform .15s, opacity .15s;
 }
+.play-btn:hover { transform: scale(1.1); opacity: .9; }
 .play-btn::after {
-content: ‘’;
-border-style: solid;
-border-width: 14px 0 14px 26px;
-border-color: transparent transparent transparent #fff;
-margin-left: 4px;
+  content: '';
+  border-style: solid;
+  border-width: 14px 0 14px 26px;
+  border-color: transparent transparent transparent #fff;
+  margin-left: 4px;
 }
 .video-label {
-position: absolute;
-bottom: 0;
-left: 0;
-right: 0;
-background: rgba(0,0,0,.6);
-color: #fff;
-font-size: .75rem;
-padding: 5px 10px;
-display: flex;
-justify-content: space-between;
-align-items: center;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0,0,0,.6);
+  color: #fff;
+  font-size: .75rem;
+  padding: 5px 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 .video-label .teacher-name-large {
-font-size: 1.3rem;
-font-weight: 900;
+  font-size: 1.3rem;
+  font-weight: 900;
 }
 .yt-badge {
-display: flex;
-align-items: center;
-gap: 4px;
-font-size: .72rem;
-opacity: .9;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: .72rem;
+  opacity: .9;
 }
 .yt-icon {
-background: #f00;
-color: #fff;
-font-size: .6rem;
-padding: 2px 5px;
-border-radius: 3px;
-font-weight: 700;
+  background: #f00;
+  color: #fff;
+  font-size: .6rem;
+  padding: 2px 5px;
+  border-radius: 3px;
+  font-weight: 700;
 }
 
 /* ── 紹介文 ── */
 .bio {
-padding: 16px 14px;
-font-size: .88rem;
-line-height: 1.85;
-color: #333;
-border-top: 1px solid #e0e0e0;
+  padding: 16px 14px;
+  font-size: .88rem;
+  line-height: 1.85;
+  color: #333;
+  border-top: 1px solid #e0e0e0;
 }
 
-/* ── 編集パネル ── */
+/* ── 編集パネル（折りたたみ） ── */
+.edit-toggle-bar {
+  background: #1a6ab8;
+  color: #fff;
+  font-size: .88rem;
+  font-weight: 700;
+  padding: 10px 14px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  user-select: none;
+  margin-top: 10px;
+}
+.edit-toggle-bar:hover { background: #155aa0; }
+.edit-toggle-bar .arrow {
+  font-size: .75rem;
+  transition: transform .25s;
+}
+.edit-toggle-bar.open .arrow { transform: rotate(180deg); }
+
 .edit-panel {
-background: #f7f9fb;
-border-top: 3px solid #1a6ab8;
-padding: 20px 16px;
+  background: #f7f9fb;
+  border: 2px solid #1a6ab8;
+  border-top: none;
+  padding: 20px 16px;
+  display: none;
 }
-.edit-panel h2 {
-font-size: .95rem;
-color: #1a6ab8;
-font-weight: 700;
-margin-bottom: 16px;
-padding-bottom: 6px;
-border-bottom: 1px solid #c0d4ea;
-}
+.edit-panel.open { display: block; }
+
 .field { margin-bottom: 14px; }
 .field label {
-display: block;
-font-size: .78rem;
-font-weight: 700;
-color: #555;
-margin-bottom: 4px;
+  display: block;
+  font-size: .78rem;
+  font-weight: 700;
+  color: #555;
+  margin-bottom: 4px;
 }
 .field input, .field textarea, .field select {
-width: 100%;
-padding: 8px 10px;
-border: 1px solid #c0c0c0;
-border-radius: 4px;
-font-size: .85rem;
-font-family: inherit;
-background: #fff;
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid #c0c0c0;
+  border-radius: 4px;
+  font-size: .85rem;
+  font-family: inherit;
+  background: #fff;
 }
 .field textarea { resize: vertical; min-height: 80px; }
 .field input[type=file] { padding: 4px; background: #fff; }
 
 .apply-btn {
-width: 100%;
-padding: 12px;
-background: #f05a28;
-color: #fff;
-border: none;
-border-radius: 6px;
-font-size: .95rem;
-font-weight: 700;
-cursor: pointer;
-margin-top: 6px;
-font-family: inherit;
+  width: 100%;
+  padding: 12px;
+  background: #f05a28;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: .95rem;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 6px;
+  font-family: inherit;
 }
 .apply-btn:hover { background: #d44a1a; }
 
 /* ── その他講師 ── */
 .other-section {
-background: #00a99d;
-color: #fff;
-font-size: .85rem;
-font-weight: 700;
-padding: 7px 12px;
-margin-top: 10px;
+  background: #00a99d;
+  color: #fff;
+  font-size: .85rem;
+  font-weight: 700;
+  padding: 7px 12px;
+  margin-top: 10px;
 }
 .other-teachers {
-display: flex;
-gap: 8px;
-padding: 10px 12px;
-overflow-x: auto;
-background: #fff;
-border-top: 1px solid #e0e0e0;
+  display: flex;
+  gap: 8px;
+  padding: 10px 12px;
+  overflow-x: auto;
+  background: #fff;
+  border-top: 1px solid #e0e0e0;
 }
 .other-teacher {
-flex-shrink: 0;
-width: 60px;
-height: 60px;
-border-radius: 50%;
-background: #ddd;
-border: 2px solid #ccc;
-overflow: hidden;
+  flex-shrink: 0;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: #ddd;
+  border: 2px solid #ccc;
+  overflow: hidden;
+  cursor: pointer;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: .6rem;
+  color: #888;
+  transition: border-color .15s;
 }
+.other-teacher:hover { border-color: #00a99d; }
 .other-teacher img { width: 100%; height: 100%; object-fit: cover; }
 
 /* ── フッター ── */
 .footer-arrow {
-text-align: right;
-padding: 8px 12px;
-background: #fff;
-border-top: 1px solid #e0e0e0;
+  text-align: right;
+  padding: 8px 12px;
+  background: #fff;
+  border-top: 1px solid #e0e0e0;
 }
 .arrow-btn {
-display: inline-block;
-background: #888;
-color: #fff;
-width: 32px;
-height: 32px;
-border-radius: 50%;
-font-size: 1rem;
-line-height: 32px;
-text-align: center;
+  display: inline-block;
+  background: #888;
+  color: #fff;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  font-size: 1rem;
+  line-height: 32px;
+  text-align: center;
+  cursor: pointer;
+  border: none;
 }
+.arrow-btn:hover { background: #555; }
 </style>
-
 </head>
 <body>
 
 <!-- サイトヘッダー -->
-
 <div class="site-header">
   <div class="site-title">南高校<span>.</span>com</div>
   <div style="font-size:.7rem;color:#888">予備校・大学受験</div>
 </div>
 <div class="header-btns">
-  <button class="header-btn btn-orange">資料請求▶</button>
-  <button class="header-btn btn-blue">個別相談▶</button>
-  <button class="header-btn btn-red">今すぐ体験▶</button>
-  <button class="header-btn btn-teal">もっと知りたい▶</button>
+  <a href="request.html" class="header-btn btn-orange">資料請求▶</a>
+  <a href="consult.html" class="header-btn btn-blue">個別相談▶</a>
+  <a href="trial.html" class="header-btn btn-red">今すぐ体験▶</a>
+  <a href="about.html" class="header-btn btn-teal">もっと知りたい▶</a>
 </div>
 
 <!-- メインコンテンツ -->
-
 <div class="container">
 
   <!-- 先生名バー -->
-
   <div class="teacher-bar">
     <span id="disp-name">菊池 洋美 先生</span>
     <span class="subject" id="disp-subject">[ 化学 ]</span>
   </div>
 
   <!-- 先生情報カード -->
-
   <div class="teacher-card">
     <div class="teacher-info">
       <div class="teacher-photo" id="disp-photo-wrap">
@@ -328,92 +360,101 @@ text-align: center;
       </div>
     </div>
 
-<!-- 動画エリア -->
-<div class="video-wrap" id="video-wrap">
-  <img id="disp-video-thumb" src="" alt="" style="display:none; position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
-  <div class="video-overlay">
-    <div class="video-title" id="disp-video-title">南高校　講師紹介 化学 菊池 洋美先生</div>
-    <div class="play-btn"></div>
-  </div>
-  <div class="video-label">
-    <span class="teacher-name-large" id="disp-name-large">菊池 洋美</span>
-    <span class="yt-badge"><span class="yt-icon">▶</span> YouTube</span>
-  </div>
-</div>
+    <!-- 動画エリア -->
+    <div class="video-wrap" id="video-wrap">
+      <img id="disp-video-thumb" src="" alt="" style="display:none; position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
+      <div class="video-overlay">
+        <div class="video-title" id="disp-video-title">南高校　講師紹介 化学 菊池 洋美先生</div>
+        <a class="play-btn" id="play-btn-link" href="#" target="_blank" rel="noopener"></a>
+      </div>
+      <div class="video-label">
+        <span class="teacher-name-large" id="disp-name-large">菊池 洋美</span>
+        <span class="yt-badge"><span class="yt-icon">▶</span> YouTube</span>
+      </div>
+    </div>
 
-<!-- 紹介文 -->
-<div class="bio" id="disp-bio">
- 「理系は知っているだけではだめ、高い倫理観を持ちながらそれを行使できるかが重要」であるとし、原理・定義・法則の欠落を生む学校法人初の授業をしない授業を軸に、おじさんおばさんをリズミカルに流す。それは知識を振り回すだけの学習を超え、こうはなってはいけないという直感を君に与えてくれるだろう。YouTubeの乱用のみならず、それをけなす圧倒的倫理観に重点を置いた講義で、生徒の謎をひたすら放置していく。
-</div>
-
+    <!-- 紹介文 -->
+    <div class="bio" id="disp-bio">
+      「理系は知っているだけではだめ、高い倫理観を持ちながらそれを行使できるかが重要」であるとし、原理・定義・法則の欠落を生む学校法人初の授業をしない授業を軸に、おじさんおばさんをリズミカルに流す。それは知識を振り回すだけの学習を超え、こうはなってはいけないという直感を君に与えてくれるだろう。YouTubeの乱用のみならず、それをけなす圧倒的倫理観に重点を置いた講義で、生徒の謎をひたすら放置していく。
+    </div>
   </div>
 
   <!-- その他の講師 -->
-
   <div class="other-section">その他の講師陣</div>
-  <div class="other-teachers">
-    <div class="other-teacher"></div>
-    <div class="other-teacher"></div>
-    <div class="other-teacher"></div>
-    <div class="other-teacher"></div>
-    <div class="other-teacher"></div>
-    <div class="other-teacher"></div>
+  <div class="other-teachers" id="other-teachers-list">
+    <!-- JSで生成 -->
   </div>
-  <div class="footer-arrow"><span class="arrow-btn">▲</span></div>
+  <div class="footer-arrow"><button class="arrow-btn" onclick="window.scrollTo({top:0,behavior:'smooth'})">▲</button></div>
 
-  <!-- 編集パネル -->
+  <!-- 編集パネル（折りたたみ） -->
+  <div class="edit-toggle-bar" id="edit-toggle" onclick="toggleEdit()">
+    <span>✏️ 内容を編集する</span>
+    <span class="arrow">▼</span>
+  </div>
+  <div class="edit-panel" id="edit-panel">
 
-  <div class="edit-panel">
-    <h2>✏️ 内容を編集する</h2>
+    <div class="field">
+      <label>先生名（例：山田 太郎 先生）</label>
+      <input type="text" id="in-name" value="菊池 洋美 先生" placeholder="○○ ○○ 先生">
+    </div>
 
-<div class="field">
-  <label>先生名（例：山田 太郎 先生）</label>
-  <input type="text" id="in-name" value="菊池 洋美 先生" placeholder="○○ ○○ 先生">
-</div>
+    <div class="field">
+      <label>教科（例：物理 / 数学 / 英語）</label>
+      <input type="text" id="in-subject" value="化学" placeholder="化学">
+    </div>
 
-<div class="field">
-  <label>教科（例：物理 / 数学 / 英語）</label>
-  <input type="text" id="in-subject" value="化学" placeholder="化学">
-</div>
+    <div class="field">
+      <label>キャッチコピー（先生カード内の短い紹介文）</label>
+      <textarea id="in-catchcopy" rows="3">授業ではなく、化学学習の自主性を最重視し、 「理系の倫理観」を養成する！</textarea>
+    </div>
 
-<div class="field">
-  <label>キャッチコピー（先生カード内の短い紹介文）</label>
-  <textarea id="in-catchcopy" rows="3"> 授業ではなく、化学学習の自主性を最重視し、 「理系の倫理観」を養成する！ </textarea>
-</div>
+    <div class="field">
+      <label>動画タイトル</label>
+      <input type="text" id="in-vtitle" value="南高校　講師紹介 化学 菊池 洋美先生" placeholder="講師紹介動画タイトル">
+    </div>
 
-<div class="field">
-  <label>動画タイトル</label>
-  <input type="text" id="in-vtitle" value="南高校　講師紹介 化学 菊池 洋美先生" placeholder="講師紹介動画タイトル">
-</div>
+    <div class="field">
+      <label>動画URL（YouTubeなど）</label>
+      <input type="text" id="in-video-url" value="" placeholder="https://www.youtube.com/watch?v=...">
+    </div>
 
-<div class="field">
-  <label>紹介文（本文）</label>
-  <textarea id="in-bio" rows="6"> 「理系は知っているだけではだめ、高い倫理観を持ちながらそれを行使できるかが重要」であるとし、原理・定義・法則の欠落を生む学校法人初の授業をしない授業を軸に、おじさんおばさんをリズミカルに流す。それは知識を振り回すだけの学習を超え、こうはなってはいけないという直感を君に与えてくれるだろう。YouTubeの乱用のみならず、それをけなす圧倒的倫理観に重点を置いた講義で、生徒の謎をひたすら放置していく。 </textarea>
-</div>
+    <div class="field">
+      <label>紹介文（本文）</label>
+      <textarea id="in-bio" rows="6">「理系は知っているだけではだめ、高い倫理観を持ちながらそれを行使できるかが重要」であるとし、原理・定義・法則の欠落を生む学校法人初の授業をしない授業を軸に、おじさんおばさんをリズミカルに流す。それは知識を振り回すだけの学習を超え、こうはなってはいけないという直感を君に与えてくれるだろう。YouTubeの乱用のみならず、それをけなす圧倒的倫理観に重点を置いた講義で、生徒の謎をひたすら放置していく。</textarea>
+    </div>
 
-<div class="field">
-  <label>先生の写真（カード内サムネイル用）</label>
-  <input type="file" id="in-photo" accept="image/*">
-</div>
+    <div class="field">
+      <label>先生の写真（カード内サムネイル用）</label>
+      <input type="file" id="in-photo" accept="image/*">
+    </div>
 
-<div class="field">
-  <label>動画サムネイル画像</label>
-  <input type="file" id="in-thumb" accept="image/*">
-</div>
+    <div class="field">
+      <label>動画サムネイル画像</label>
+      <input type="file" id="in-thumb" accept="image/*">
+    </div>
 
-<button class="apply-btn" onclick="applyChanges()">反映する</button>
-
+    <button class="apply-btn" onclick="applyChanges()">反映する</button>
   </div>
 
 </div>
 
 <script>
+/* ── 編集パネル開閉 ── */
+function toggleEdit() {
+  var bar   = document.getElementById('edit-toggle');
+  var panel = document.getElementById('edit-panel');
+  bar.classList.toggle('open');
+  panel.classList.toggle('open');
+}
+
+/* ── 内容反映 ── */
 function applyChanges() {
-  var name    = document.getElementById('in-name').value.trim() || '先生名';
-  var subject = document.getElementById('in-subject').value.trim() || '教科';
-  var cc      = document.getElementById('in-catchcopy').value.trim();
-  var vtitle  = document.getElementById('in-vtitle').value.trim();
-  var bio     = document.getElementById('in-bio').value.trim();
+  var name     = document.getElementById('in-name').value.trim() || '先生名';
+  var subject  = document.getElementById('in-subject').value.trim() || '教科';
+  var cc       = document.getElementById('in-catchcopy').value.trim();
+  var vtitle   = document.getElementById('in-vtitle').value.trim();
+  var videoUrl = document.getElementById('in-video-url').value.trim();
+  var bio      = document.getElementById('in-bio').value.trim();
   var photoFile = document.getElementById('in-photo').files[0];
   var thumbFile = document.getElementById('in-thumb').files[0];
 
@@ -423,6 +464,10 @@ function applyChanges() {
   document.getElementById('disp-catchcopy').innerHTML = cc.replace(/\n/g,'<br>');
   document.getElementById('disp-video-title').textContent = vtitle;
   document.getElementById('disp-bio').textContent = bio;
+
+  if (videoUrl) {
+    document.getElementById('play-btn-link').href = videoUrl;
+  }
 
   if (photoFile) {
     var reader = new FileReader();
@@ -445,7 +490,32 @@ function applyChanges() {
     reader2.readAsDataURL(thumbFile);
   }
 }
-</script>
 
+/* ── その他講師陣（teachers.js から読み込む想定 / ここではインライン定義） ── */
+var otherTeachers = [
+  { name: '田中 誠 先生', subject: '数学', page: 'teacher-math.html', photo: '' },
+  { name: '鈴木 花子 先生', subject: '英語', page: 'teacher-english.html', photo: '' },
+  { name: '山本 健太 先生', subject: '物理', page: 'teacher-physics.html', photo: '' },
+  { name: '佐藤 美咲 先生', subject: '国語', page: 'teacher-japanese.html', photo: '' },
+  { name: '伊藤 隆 先生',   subject: '生物', page: 'teacher-biology.html', photo: '' },
+  { name: '渡辺 由美 先生', subject: '地理', page: 'teacher-geography.html', photo: '' },
+];
+
+(function buildOtherTeachers() {
+  var container = document.getElementById('other-teachers-list');
+  otherTeachers.forEach(function(t) {
+    var a = document.createElement('a');
+    a.className = 'other-teacher';
+    a.href = t.page;
+    a.title = t.name + '（' + t.subject + '）';
+    if (t.photo) {
+      a.innerHTML = '<img src="' + t.photo + '" alt="' + t.name + '">';
+    } else {
+      a.textContent = t.subject;
+    }
+    container.appendChild(a);
+  });
+})();
+</script>
 </body>
 </html>
