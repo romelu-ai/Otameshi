@@ -74,7 +74,7 @@
   flex-direction: column; align-items: center; justify-content: center; color: #fff;
   pointer-events: none;
 }
-/* iframeが入ったらオーバーレイを非表示（iframeに自前の再生UIがある） */
+/* MP4ファイル再生時のみオーバーレイを非表示（videoタグ自身に再生UIあり） */
 .video-wrap.has-embed .video-overlay { display: none; }
 /* ラベルバーも z-index:2 */
 .video-label {
@@ -381,47 +381,44 @@ function resolveVideo(url) {
 /* ── 動画エリアを描画 ── */
 function renderVideo(d) {
   var wrap = document.getElementById('video-wrap');
+  // 既存のiframe/videoを削除
   ['__iframe__', '__video__'].forEach(function(id) {
     var el = document.getElementById(id);
     if (el) el.parentNode.removeChild(el);
   });
   wrap.classList.remove('has-embed');
 
-  var thumb = document.getElementById('disp-video-thumb');
+  var thumb  = document.getElementById('disp-video-thumb');
+  var playBtn = document.getElementById('play-btn-link');
 
-  // サムネイル：設定があれば常に表示（iframeの後ろに見える）
+  // サムネイル：設定があれば常に表示
   if (d.thumb) { thumb.src = d.thumb; thumb.style.display = 'block'; }
   else { thumb.style.display = 'none'; }
 
   if (d.videoType === 'file' && d.videoData) {
-    // MP4ファイル再生
+    // MP4ファイル → ページ内video要素で再生
     var vid = document.createElement('video');
     vid.id = '__video__'; vid.controls = true; vid.src = d.videoData;
     wrap.insertBefore(vid, wrap.firstChild);
-    wrap.classList.add('has-embed');
+    wrap.classList.add('has-embed'); // videoタグ自体に再生UIあるのでオーバーレイ非表示
     document.getElementById('badge-text').textContent = '動画';
 
   } else if (d.videoType === 'url' && d.videoUrl) {
     var res = resolveVideo(d.videoUrl);
+    // YouTube・Vimeo・外部リンクすべて「赤ボタンクリックで開く」に統一
+    playBtn.href   = res.src;   // embedURLではなく元のURLを使う
+    playBtn.target = '_blank';
+    // YouTube/Vimeoは元URLを直接セット
     if (res.mode === 'embed') {
-      // YouTube/Vimeo/Google Drive → iframeを先頭に挿入
-      // サムネイルはiframeの後ろ（z-index同じなのでDOMの後ろ＝下）に表示
-      var ifr = document.createElement('iframe');
-      ifr.id = '__iframe__'; ifr.src = res.src;
-      ifr.allowFullscreen = true;
-      ifr.setAttribute('allow', 'autoplay; fullscreen; picture-in-picture');
-      wrap.insertBefore(ifr, wrap.firstChild);
-      wrap.classList.add('has-embed');
-      document.getElementById('badge-text').textContent = res.badge;
-    } else {
-      // 外部リンク → 赤ボタンにURLをセット
-      document.getElementById('play-btn-link').href = res.src;
-      document.getElementById('badge-text').textContent = res.badge;
+      // embedのsrcではなくオリジナルURLで開く
+      playBtn.href = d.videoUrl;
     }
+    document.getElementById('badge-text').textContent = res.badge;
 
   } else {
     // 動画なし
-    document.getElementById('play-btn-link').href = '#';
+    playBtn.href   = '#';
+    playBtn.target = '';
     document.getElementById('badge-text').textContent = '動画';
   }
 }
