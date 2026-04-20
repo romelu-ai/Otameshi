@@ -352,6 +352,8 @@
 <script>
 var _page = location.pathname.split('/').pop() || 'index.html';
 var STORAGE_KEY = 'minami_profile__' + _page;
+/* サムネイルを別キーに分けて保存（大きい画像でも他データに影響しないよう分離） */
+var THUMB_KEY   = 'minami_thumb__'    + _page;
 
 /* ── 編集パネル開閉 ── */
 function toggleEdit() {
@@ -381,42 +383,37 @@ function resolveVideo(url) {
 /* ── 動画エリアを描画 ── */
 function renderVideo(d) {
   var wrap = document.getElementById('video-wrap');
-  // 既存のiframe/videoを削除
   ['__iframe__', '__video__'].forEach(function(id) {
     var el = document.getElementById(id);
     if (el) el.parentNode.removeChild(el);
   });
   wrap.classList.remove('has-embed');
 
-  var thumb  = document.getElementById('disp-video-thumb');
+  var thumb   = document.getElementById('disp-video-thumb');
   var playBtn = document.getElementById('play-btn-link');
 
-  // サムネイル：設定があれば常に表示
-  if (d.thumb) { thumb.src = d.thumb; thumb.style.display = 'block'; }
-  else { thumb.style.display = 'none'; }
+  /* ── サムネイル：d.thumb が無ければ別キーから補完 ── */
+  var thumbSrc = d.thumb || '';
+  if (!thumbSrc) {
+    try { thumbSrc = localStorage.getItem(THUMB_KEY) || ''; } catch(e) {}
+  }
+  if (thumbSrc) { thumb.src = thumbSrc; thumb.style.display = 'block'; }
+  else          { thumb.style.display = 'none'; }
 
   if (d.videoType === 'file' && d.videoData) {
-    // MP4ファイル → ページ内video要素で再生
     var vid = document.createElement('video');
     vid.id = '__video__'; vid.controls = true; vid.src = d.videoData;
     wrap.insertBefore(vid, wrap.firstChild);
-    wrap.classList.add('has-embed'); // videoタグ自体に再生UIあるのでオーバーレイ非表示
+    wrap.classList.add('has-embed');
     document.getElementById('badge-text').textContent = '動画';
 
   } else if (d.videoType === 'url' && d.videoUrl) {
     var res = resolveVideo(d.videoUrl);
-    // YouTube・Vimeo・外部リンクすべて「赤ボタンクリックで開く」に統一
-    playBtn.href   = res.src;   // embedURLではなく元のURLを使う
+    playBtn.href   = res.mode === 'embed' ? d.videoUrl : res.src;
     playBtn.target = '_blank';
-    // YouTube/Vimeoは元URLを直接セット
-    if (res.mode === 'embed') {
-      // embedのsrcではなくオリジナルURLで開く
-      playBtn.href = d.videoUrl;
-    }
     document.getElementById('badge-text').textContent = res.badge;
 
   } else {
-    // 動画なし
     playBtn.href   = '#';
     playBtn.target = '';
     document.getElementById('badge-text').textContent = '動画';
@@ -439,7 +436,6 @@ function renderProfile(d) {
   }
   renderVideo(d);
 
-  // フォームへも反映
   document.getElementById('in-name').value      = d.name || '';
   document.getElementById('in-subject').value   = d.subject || '';
   document.getElementById('in-catchcopy').value = d.catchcopy || '';
@@ -452,8 +448,44 @@ function renderProfile(d) {
   }
 }
 
-function saveProfile(d) { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(d)); } catch(e) {} }
-function loadProfile()  { try { var s = localStorage.getItem(STORAGE_KEY); return s ? JSON.parse(s) : null; } catch(e) { return null; } }
+/* ── 保存：サムネイルを別キーに分離して保存 ── */
+function saveProfile(d) {
+  /* サムネイルを別キーに切り出し（メインデータの肥大化を防ぐ） */
+  var thumbData = d.thumb || '';
+  var dToSave   = Object.assign({}, d);
+  /* メインキーにはサムネイルを含めない */
+  delete dToSave.thumb;
+
+  var ok = true;
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(dToSave));
+  } catch(e) {
+    ok = false;
+    alert('⚠️ テキスト情報の保存に失敗しました。\nブラウザのストレージ容量が不足しています。\n動画ファイルのデータを削除するか、別の方法で保存してください。');
+  }
+
+  if (thumbData) {
+    try {
+      localStorage.setItem(THUMB_KEY, thumbData);
+    } catch(e) {
+      alert('⚠️ サムネイル画像の保存に失敗しました。\n画像ファイルが大きすぎる可能性があります。\nより小さいサイズの画像をお試しください。');
+    }
+  }
+  return ok;
+}
+
+function loadProfile() {
+  try {
+    var s = localStorage.getItem(STORAGE_KEY);
+    var d = s ? JSON.parse(s) : null;
+    if (d) {
+      /* 別キーに保存されたサムネイルを復元 */
+      var thumb = localStorage.getItem(THUMB_KEY);
+      if (thumb) d.thumb = thumb;
+    }
+    return d;
+  } catch(e) { return null; }
+}
 
 /* ── 反映ボタン ── */
 function applyChanges() {
@@ -477,7 +509,11 @@ function applyChanges() {
   if (videoFile && videoType === 'file') jobs.push({ key: 'videoData', file: videoFile });
 
   function run(i) {
-    if (i >= jobs.length) { renderProfile(d); saveProfile(d); return; }
+    if (i >= jobs.length) {
+      renderProfile(d);
+      saveProfile(d);
+      return;
+    }
     var r = new FileReader();
     r.onload = function(e) { d[jobs[i].key] = e.target.result; run(i + 1); };
     r.readAsDataURL(jobs[i].file);
@@ -500,7 +536,6 @@ function buildOtherTeachers() {
   try { var s = localStorage.getItem(TEACHERS_KEY); list = s ? JSON.parse(s) : defaults; }
   catch(e) { list = defaults; }
 
-  // 自分のページは除外
   list = list.filter(function(t) { return t.page !== _page; });
 
   var container = document.getElementById('other-teachers-list');
@@ -511,7 +546,6 @@ function buildOtherTeachers() {
   }
 
   list.forEach(function(t) {
-    // 各講師ページのprofileから写真を優先取得、なければteachers登録の写真
     var photo = '';
     try {
       var ps = localStorage.getItem('minami_profile__' + t.page);
