@@ -339,29 +339,14 @@
     </div>
 
     <div class="field">
-      <label>動画サムネイル画像（URLまたは動画なし時に背景として表示）</label>
+      <label>動画サムネイル画像（YouTube・Vimeoのiframe背後にも表示されます）</label>
       <input type="file" id="in-thumb" accept="image/*">
+      <div class="field-note">YouTubeのURLを設定している場合でも、この画像が背景として表示されます。</div>
     </div>
 
     <button class="apply-btn" onclick="applyChanges()">反映する</button>
   </div>
 
-</div>
-
-<!-- バックアップバー（常時表示） -->
-<div class="backup-bar">
-  <div class="backup-title">💾 バックアップ／復元</div>
-  <div class="backup-note">
-    全講師の編集内容・写真・動画URLをまとめて1つのJSONファイルに保存できます。<br>
-    別のブラウザや端末でアクセスしたときに「読み込む」を押せばすべて復元されます。
-  </div>
-  <div class="backup-btns">
-    <button class="backup-export-btn" onclick="exportData()">⬇️ バックアップを保存</button>
-    <label class="backup-import-btn">
-      ⬆️ バックアップを読み込む
-      <input type="file" accept=".json" onchange="importData(this)" style="display:none;">
-    </label>
-  </div>
 </div>
 
 <script>
@@ -396,7 +381,6 @@ function resolveVideo(url) {
 /* ── 動画エリアを描画 ── */
 function renderVideo(d) {
   var wrap = document.getElementById('video-wrap');
-  // 古いiframe/videoを削除
   ['__iframe__', '__video__'].forEach(function(id) {
     var el = document.getElementById(id);
     if (el) el.parentNode.removeChild(el);
@@ -405,46 +389,40 @@ function renderVideo(d) {
 
   var thumb = document.getElementById('disp-video-thumb');
 
+  // サムネイル：設定があれば常に表示（iframeの後ろに見える）
+  if (d.thumb) { thumb.src = d.thumb; thumb.style.display = 'block'; }
+  else { thumb.style.display = 'none'; }
+
   if (d.videoType === 'file' && d.videoData) {
-    // MP4などのファイル再生
+    // MP4ファイル再生
     var vid = document.createElement('video');
     vid.id = '__video__'; vid.controls = true; vid.src = d.videoData;
     wrap.insertBefore(vid, wrap.firstChild);
     wrap.classList.add('has-embed');
     document.getElementById('badge-text').textContent = '動画';
-    thumb.style.display = 'none';
 
   } else if (d.videoType === 'url' && d.videoUrl) {
     var res = resolveVideo(d.videoUrl);
     if (res.mode === 'embed') {
-      // YouTube/Vimeo/Google Drive → iframeをwrapの先頭に挿入（z-index:1でオーバーレイの下）
-      // has-embedを付けてオーバーレイ（赤ボタン）を非表示にする
-      // iframeプレーヤー自身に再生UIがあるため問題なし
+      // YouTube/Vimeo/Google Drive → iframeを先頭に挿入
+      // サムネイルはiframeの後ろ（z-index同じなのでDOMの後ろ＝下）に表示
       var ifr = document.createElement('iframe');
       ifr.id = '__iframe__'; ifr.src = res.src;
       ifr.allowFullscreen = true;
       ifr.setAttribute('allow', 'autoplay; fullscreen; picture-in-picture');
-      // iframeをDOMの先頭に置く（CSS z-index:1 < overlay z-index:2）
-      // has-embedでoverlayを消すのでiframeが全面に見える
       wrap.insertBefore(ifr, wrap.firstChild);
       wrap.classList.add('has-embed');
       document.getElementById('badge-text').textContent = res.badge;
-      // サムネイルは非表示（iframeが覆うため）
-      thumb.style.display = 'none';
     } else {
-      // 外部リンク → 赤いボタンにURLをセット（オーバーレイ表示のまま）
+      // 外部リンク → 赤ボタンにURLをセット
       document.getElementById('play-btn-link').href = res.src;
       document.getElementById('badge-text').textContent = res.badge;
-      if (d.thumb) { thumb.src = d.thumb; thumb.style.display = 'block'; }
-      else { thumb.style.display = 'none'; }
     }
 
   } else {
-    // 動画なし or 未設定
+    // 動画なし
     document.getElementById('play-btn-link').href = '#';
     document.getElementById('badge-text').textContent = '動画';
-    if (d.thumb) { thumb.src = d.thumb; thumb.style.display = 'block'; }
-    else { thumb.style.display = 'none'; }
   }
 }
 
@@ -567,51 +545,6 @@ function buildOtherTeachers() {
     a.appendChild(lbl);
     container.appendChild(a);
   });
-}
-
-/* ── エクスポート：全localStorageのminami_系キーをJSONに書き出す ── */
-function exportData() {
-  var data = {};
-  for (var i = 0; i < localStorage.length; i++) {
-    var key = localStorage.key(i);
-    if (key && key.indexOf('minami_') === 0) {
-      try { data[key] = JSON.parse(localStorage.getItem(key)); }
-      catch(e) { data[key] = localStorage.getItem(key); }
-    }
-  }
-  var json = JSON.stringify(data, null, 2);
-  var blob = new Blob([json], { type: 'application/json' });
-  var url  = URL.createObjectURL(blob);
-  var a    = document.createElement('a');
-  a.href = url;
-  a.download = 'minami-school-data.json';
-  a.click();
-  URL.revokeObjectURL(url);
-}
-
-/* ── インポート：JSONファイルを読み込んでlocalStorageに一括復元 ── */
-function importData(input) {
-  var file = input.files[0];
-  if (!file) return;
-  var reader = new FileReader();
-  reader.onload = function(e) {
-    try {
-      var data = JSON.parse(e.target.result);
-      var count = 0;
-      Object.keys(data).forEach(function(key) {
-        if (key.indexOf('minami_') === 0) {
-          localStorage.setItem(key, JSON.stringify(data[key]));
-          count++;
-        }
-      });
-      alert('✅ インポート完了！\n' + count + '件のデータを復元しました。\nページを再読み込みします。');
-      location.reload();
-    } catch(err) {
-      alert('❌ 読み込みに失敗しました。\n正しいJSONファイルを選択してください。');
-    }
-  };
-  reader.readAsText(file);
-  input.value = '';
 }
 
 /* ── 初期化 ── */
